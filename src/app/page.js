@@ -1,8 +1,11 @@
+import Navbar from "@/components/Navbar";
 import CyberCard from "@/components/CyberCard";
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-black text-white p-6">
+
+      <Navbar />
 
       <div className="flex justify-between items-center mb-10">
         <h1 className="text-3xl font-bold text-cyan-400">
@@ -55,3 +58,4 @@ export default function Home() {
     </main>
   );
 }
+
