@@ -1,27 +1,45 @@
+import Link from "next/link";
+
 export default function Navbar() {
   return (
-    <nav className="flex gap-4 mb-8 border border-cyan-500 p-4 rounded-2xl bg-zinc-900">
+    <nav className="flex gap-4 mb-8 border border-cyan-500 bg-zinc-900 p-4 rounded-2xl overflow-x-auto">
 
-      <button className="text-cyan-400 font-bold">
+      <Link
+        href="/"
+        className="text-cyan-400 font-bold whitespace-nowrap"
+      >
         Dashboard
-      </button>
+      </Link>
 
-      <button className="text-gray-400">
+      <Link
+        href="/assets"
+        className="text-gray-400 whitespace-nowrap"
+      >
         Assets
-      </button>
+      </Link>
 
-      <button className="text-gray-400">
+      <Link
+        href="/wallets"
+        className="text-gray-400 whitespace-nowrap"
+      >
         Wallets
-      </button>
+      </Link>
 
-      <button className="text-gray-400">
+      <Link
+        href="/alerts"
+        className="text-gray-400 whitespace-nowrap"
+      >
         Alerts
-      </button>
+      </Link>
 
-      <button className="text-gray-400">
+      <Link
+        href="/ai-agent"
+        className="text-gray-400 whitespace-nowrap"
+      >
         AI Agent
-      </button>
+      </Link>
 
     </nav>
   );
 }
+
