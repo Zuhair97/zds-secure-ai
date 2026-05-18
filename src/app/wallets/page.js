@@ -12,27 +12,41 @@ export default function WalletsPage() {
 
       <div className="grid gap-4">
 
-        <div className="border border-cyan-500 rounded-2xl p-6 bg-zinc-900">
-          <h2 className="text-2xl font-bold text-cyan-400 mb-4">
-            Bitcoin Wallets
-          </h2>
+        {[
+          "Bitcoin Wallets",
+          "Ethereum Wallets",
+          "Solana Wallets",
+          "BNB Chain Wallets",
+          "Tron Wallets",
+          "XRP Ledger Wallets",
+          "Cardano Wallets",
+          "Polygon Wallets",
+          "Avalanche Wallets",
+          "Pi Network Wallets",
+          "TON Wallets",
+          "Stablecoin Wallets",
+          "NFT Wallets",
+          "DeFi Wallets"
+        ].map((wallet, index) => (
 
-          <p className="text-gray-400">
-            AI monitoring of BTC wallet activities,
-            suspicious transactions, and threat analysis.
-          </p>
-        </div>
+          <div
+            key={index}
+            className="border border-cyan-500 rounded-2xl p-6 bg-zinc-900"
+          >
 
-        <div className="border border-cyan-500 rounded-2xl p-6 bg-zinc-900">
-          <h2 className="text-2xl font-bold text-cyan-400 mb-4">
-            Ethereum Wallets
-          </h2>
+            <h2 className="text-2xl font-bold text-cyan-400 mb-4">
+              {wallet}
+            </h2>
 
-          <p className="text-gray-400">
-            Smart contract risk detection,
-            DeFi monitoring, and asset protection.
-          </p>
-        </div>
+            <p className="text-gray-400">
+              AI-powered monitoring, suspicious transaction detection,
+              digital asset intelligence, and advanced cyber protection
+              for {wallet.toLowerCase()}.
+            </p>
+
+          </div>
+
+        ))}
 
       </div>
 
