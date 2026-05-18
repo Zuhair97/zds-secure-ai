@@ -1,42 +1,63 @@
+
 import Navbar from "@/components/Navbar";
-import AssetCard from "@/components/AssetCard";
 
 export default function AssetsPage() {
 
   const assets = [
     {
       title: "Blockchain Wallets",
-      type: "Financial Assets",
+      type: "Digital Asset Security",
       status: "Protected",
       risk: "Low",
     },
 
     {
-      title: "Email Accounts",
-      type: "Identity Assets",
+      title: "Social Media Accounts",
+      type: "Identity Protection",
+      status: "Monitoring",
+      risk: "Medium",
+    },
+
+    {
+      title: "Emails & Cloud Accounts",
+      type: "Account Security",
+      status: "Secured",
+      risk: "Low",
+    },
+
+    {
+      title: "Endpoint & IoT Devices",
+      type: "Endpoint & IoT Security",
+      status: "Secured",
+      risk: "Low",
+    },
+
+    {
+      title: "PCs & Laptops",
+      type: "Endpoint Security",
+      status: "Protected",
+      risk: "Low",
+    },
+
+    {
+      title: "Smart IoT Infrastructure",
+      type: "RWA & IoT Assets",
       status: "Monitoring Active",
       risk: "Medium",
     },
 
     {
-      title: "Social Media Accounts",
-      type: "Communication Assets",
+      title: "Websites & Domains",
+      type: "Web Infrastructure",
       status: "Protected",
+      risk: "Low",
+    },
+
+    {
+      title: "AI Agents & Bots",
+      type: "Autonomous Systems",
+      status: "Active",
       risk: "Medium",
-    },
-
-    {
-      title: "Cloud Infrastructure",
-      type: "Infrastructure Assets",
-      status: "Scanning",
-      risk: "Low",
-    },
-
-    {
-      title: "Mobile Devices",
-      type: "Device Assets",
-      status: "Secured",
-      risk: "Low",
     },
   ];
 
@@ -52,13 +73,28 @@ export default function AssetsPage() {
       <div className="grid gap-6">
 
         {assets.map((asset, index) => (
-          <AssetCard
+          <div
             key={index}
-            title={asset.title}
-            type={asset.type}
-            status={asset.status}
-            risk={asset.risk}
-          />
+            className="border border-cyan-500 bg-zinc-900 rounded-2xl p-6"
+          >
+
+            <h2 className="text-2xl font-bold text-cyan-400 mb-2">
+              {asset.title}
+            </h2>
+
+            <p className="text-gray-400 mb-2">
+              Type: {asset.type}
+            </p>
+
+            <p className="text-green-400 mb-2">
+              Status: {asset.status}
+            </p>
+
+            <p className="text-yellow-400">
+              Risk Level: {asset.risk}
+            </p>
+
+          </div>
         ))}
 
       </div>
@@ -66,3 +102,4 @@ export default function AssetsPage() {
     </main>
   );
 }
+
