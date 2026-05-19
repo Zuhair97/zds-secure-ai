@@ -1,6 +1,5 @@
 export async function GET() {
-
-  const systemStatus = {
+  return Response.json({
     platform: "Sentinel AI",
     status: "ACTIVE",
     threatLevel: "LOW",
@@ -8,9 +7,6 @@ export async function GET() {
     protectedWallets: 84,
     endpointDevices: 152,
     iotDevices: 64,
-    aiEngine: "RUNNING",
-  };
-
-  return Response.json(systemStatus);
+    aiEngine: "RUNNING"
+  });
 }
-
