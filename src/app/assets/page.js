@@ -1,4 +1,72 @@
+{
+  title: "Smartphones & Tablets",
+  type: "Mobile Endpoint Security",
+  status: "Protected",
+  risk: "Low",
+},
 
+{
+  title: "Android Devices",
+  type: "Android Security",
+  status: "Monitoring Active",
+  risk: "Medium",
+},
+
+{
+  title: "iPhones & iPads",
+  type: "Apple Mobile Security",
+  status: "Protected",
+  risk: "Low",
+},
+
+{
+  title: "PCs & Laptops",
+  type: "Endpoint Security",
+  status: "Protected",
+  risk: "Low",
+},
+
+{
+  title: "CCTV & Surveillance Systems",
+  type: "IoT Security",
+  status: "Monitoring Active",
+  risk: "Medium",
+},
+
+{
+  title: "Smart Routers & Networks",
+  type: "Network Infrastructure",
+  status: "Protected",
+  risk: "Low",
+},
+
+{
+  title: "POS Machines & Smart Payments",
+  type: "Financial IoT Systems",
+  status: "Secured",
+  risk: "Medium",
+},
+
+{
+  title: "Smart Cars & GPS Trackers",
+  type: "Connected Vehicle Systems",
+  status: "Monitoring Active",
+  risk: "Medium",
+},
+
+{
+  title: "Industrial Sensors & Smart Meters",
+  type: "Industrial IoT",
+  status: "Protected",
+  risk: "Low",
+},
+
+{
+  title: "Drones & Autonomous Devices",
+  type: "Autonomous IoT Systems",
+  status: "Active",
+  risk: "Medium",
+},
 import Navbar from "@/components/Navbar";
 
 export default function AssetsPage() {
