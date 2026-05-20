@@ -148,7 +148,20 @@ export default function AssetsPage() {
         ))}
 
       </div>
+<button
+  className="mt-6 bg-red-600 hover:bg-red-700 px-4 py-2 rounded-xl"
+  onClick={async () => {
+    const { supabase } = await import(
+      "@/lib/supabase"
+    );
 
+    await supabase.auth.signOut();
+
+    window.location.href = "/auth";
+  }}
+>
+  Logout
+</button>
     </main>
   );
 }
