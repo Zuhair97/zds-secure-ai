@@ -14,46 +14,70 @@ export default function AuthPage() {
   const [password, setPassword] =
     useState("");
 
+  const [isLogin, setIsLogin] =
+    useState(true);
+
   const [loading, setLoading] =
     useState(false);
 
-  const [errorMsg, setErrorMsg] =
+  const [message, setMessage] =
     useState("");
 
-  async function handleLogin(e) {
+  async function handleAuth(e) {
 
     e.preventDefault();
 
     setLoading(true);
-    setErrorMsg("");
+    setMessage("");
 
-    const { data, error } =
-      await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+    if (isLogin) {
 
-    if (error) {
-      setErrorMsg(error.message);
-      setLoading(false);
-      return;
-    }
+      const { data, error } =
+        await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
 
-    if (data.user) {
+      if (error) {
+        setMessage(error.message);
+        setLoading(false);
+        return;
+      }
 
-      await supabase
-        .from("login_history")
-        .insert([
-          {
-            user_id: data.user.id,
-            email: data.user.email,
-            status: "successful",
-            device_info:
-              navigator.userAgent,
-          },
-        ]);
+      if (data.user) {
 
-      router.push("/security");
+        await supabase
+          .from("login_history")
+          .insert([
+            {
+              user_id: data.user.id,
+              email: data.user.email,
+              status: "successful",
+              device_info:
+                navigator.userAgent,
+            },
+          ]);
+
+        router.push("/security");
+      }
+
+    } else {
+
+      const { error } =
+        await supabase.auth.signUp({
+          email,
+          password,
+        });
+
+      if (error) {
+        setMessage(error.message);
+        setLoading(false);
+        return;
+      }
+
+      setMessage(
+        "Signup successful. Check your email."
+      );
     }
 
     setLoading(false);
@@ -62,7 +86,7 @@ export default function AuthPage() {
   async function handleForgotPassword() {
 
     if (!email) {
-      setErrorMsg(
+      setMessage(
         "Enter your email first"
       );
       return;
@@ -78,11 +102,11 @@ export default function AuthPage() {
       );
 
     if (error) {
-      setErrorMsg(error.message);
+      setMessage(error.message);
       return;
     }
 
-    setErrorMsg(
+    setMessage(
       "Password reset email sent."
     );
   }
@@ -92,7 +116,7 @@ export default function AuthPage() {
     <main className="min-h-screen bg-black flex items-center justify-center p-6">
 
       <form
-        onSubmit={handleLogin}
+        onSubmit={handleAuth}
         className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 w-full max-w-sm"
       >
 
@@ -124,9 +148,9 @@ export default function AuthPage() {
           required
         />
 
-        {errorMsg && (
-          <p className="text-red-500 mb-4 text-sm">
-            {errorMsg}
+        {message && (
+          <p className="text-blue-400 mb-4 text-sm">
+            {message}
           </p>
         )}
 
@@ -137,8 +161,24 @@ export default function AuthPage() {
         >
 
           {loading
-            ? "Logging in..."
-            : "Login"}
+            ? "Processing..."
+            : isLogin
+            ? "Login"
+            : "Sign Up"}
+
+        </button>
+
+        <button
+          type="button"
+          onClick={() =>
+            setIsLogin(!isLogin)
+          }
+          className="w-full mt-4 text-sm text-zinc-400"
+        >
+
+          {isLogin
+            ? "Need an account? Sign Up"
+            : "Already have an account? Login"}
 
         </button>
 
@@ -147,7 +187,7 @@ export default function AuthPage() {
           onClick={
             handleForgotPassword
           }
-          className="w-full mt-4 text-blue-400 text-sm"
+          className="w-full mt-3 text-blue-400 text-sm"
         >
           Forgot Password?
         </button>
