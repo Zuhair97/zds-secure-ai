@@ -73,7 +73,7 @@ export default function AuthPage() {
         email,
         {
           redirectTo:
-            "https://zds-secure-ai.vercel.app/auth",
+            "https://zds-secure-ai.vercel.app/reset-password",
         }
       );
 
