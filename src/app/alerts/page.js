@@ -1,75 +1,128 @@
-import Navbar from "@/components/Navbar";
+"use client";
+
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function AlertsPage() {
 
-  const alerts = [
-    {
-      title: "Suspicious Login Attempt",
-      severity: "High Risk",
-      status: "Blocked",
-      time: "2 mins ago",
-    },
+  const [alerts, setAlerts] =
+    useState([]);
 
-    {
-      title: "Phishing Link Detected",
-      severity: "Critical",
-      status: "Neutralized",
-      time: "10 mins ago",
-    },
+  useEffect(() => {
+    fetchAlerts();
+  }, []);
 
-    {
-      title: "Wallet Access Request",
-      severity: "Medium Risk",
-      status: "Monitoring",
-      time: "18 mins ago",
-    },
+  async function fetchAlerts() {
 
-    {
-      title: "API Intrusion Attempt",
-      severity: "Critical",
-      status: "Blocked",
-      time: "30 mins ago",
-    },
-  ];
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) return;
+
+    const { data } = await supabase
+      .from("login_history")
+      .select("*")
+      .eq("user_id", user.id)
+      .order("login_time", {
+        ascending: false,
+      });
+
+    if (!data) return;
+
+    const knownDevices = [];
+    const detectedAlerts = [];
+
+    data.forEach((log) => {
+
+      if (
+        !knownDevices.includes(
+          log.device_info
+        )
+      ) {
+
+        knownDevices.push(
+          log.device_info
+        );
+
+        detectedAlerts.push({
+          id: log.id,
+          type:
+            "New Device Detected",
+          email: log.email,
+          time: log.login_time,
+          device:
+            log.device_info,
+        });
+      }
+
+    });
+
+    setAlerts(detectedAlerts);
+  }
 
   return (
-    <main className="min-h-screen bg-black text-white p-6">
 
-      <Navbar />
+    <ProtectedRoute>
 
-      <h1 className="text-4xl font-bold text-cyan-400 mb-8">
-        Threat Alerts Center
-      </h1>
+      <main className="min-h-screen bg-black text-white p-6">
 
-      <div className="grid gap-6">
+        <h1 className="text-5xl font-bold mb-8">
+          Security Alerts
+        </h1>
 
-        {alerts.map((alert, index) => (
-          <div
-            key={index}
-            className="border border-red-500 bg-zinc-900 p-6 rounded-2xl"
-          >
+        {alerts.length === 0 ? (
 
-            <h2 className="text-2xl font-bold text-red-400 mb-2">
-              {alert.title}
-            </h2>
+          <p className="text-zinc-400">
+            No threats detected.
+          </p>
 
-            <p className="text-yellow-400 mb-2">
-              Severity: {alert.severity}
-            </p>
+        ) : (
 
-            <p className="text-green-400 mb-2">
-              Status: {alert.status}
-            </p>
+          <div className="grid gap-4">
 
-            <p className="text-gray-400">
-              Detected: {alert.time}
-            </p>
+            {alerts.map((alert) => (
+
+              <div
+                key={alert.id}
+                className="bg-red-950 border border-red-700 rounded-2xl p-5"
+              >
+
+                <h2 className="text-2xl font-bold text-red-400 mb-3">
+                  {alert.type}
+                </h2>
+
+                <p className="mb-2">
+                  <span className="font-bold">
+                    Email:
+                  </span>{" "}
+                  {alert.email}
+                </p>
+
+                <p className="mb-2">
+                  <span className="font-bold">
+                    Time:
+                  </span>{" "}
+                  {new Date(
+                    alert.time
+                  ).toLocaleString()}
+                </p>
+
+                <p className="text-sm text-zinc-300 break-all">
+                  {alert.device}
+                </p>
+
+              </div>
+
+            ))}
 
           </div>
-        ))}
 
-      </div>
+        )}
 
-    </main>
+      </main>
+
+    </ProtectedRoute>
   );
 }
