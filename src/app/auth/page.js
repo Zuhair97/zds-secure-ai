@@ -1,123 +1,167 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 
 export default function AuthPage() {
+
   const router = useRouter();
 
-  const [email, setEmail] = useState("");
+  const [email, setEmail] =
+    useState("");
+
   const [password, setPassword] =
     useState("");
 
-  const [isLogin, setIsLogin] =
-    useState(true);
+  const [loading, setLoading] =
+    useState(false);
 
-  const [message, setMessage] =
+  const [errorMsg, setErrorMsg] =
     useState("");
 
-  useEffect(() => {
-    async function checkSession() {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
+  async function handleLogin(e) {
 
-      if (session) {
-        router.push("/assets");
-      }
+    e.preventDefault();
+
+    setLoading(true);
+    setErrorMsg("");
+
+    const { data, error } =
+      await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+    if (error) {
+      setErrorMsg(error.message);
+      setLoading(false);
+      return;
     }
 
-    checkSession();
-  }, [router]);
+    if (data.user) {
 
-  async function handleAuth() {
-    setMessage("Processing...");
+      await supabase
+        .from("login_history")
+        .insert([
+          {
+            user_id: data.user.id,
+            email: data.user.email,
+            status: "successful",
+            device_info:
+              navigator.userAgent,
+          },
+        ]);
 
-    if (isLogin) {
-      const { error } =
-        await supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
-
-      if (error) {
-        setMessage(error.message);
-      } else {
-        setMessage("Login successful.");
-
-        router.push("/assets");
-      }
-    } else {
-      const { error } =
-        await supabase.auth.signUp({
-          email,
-          password,
-        });
-
-      if (error) {
-        setMessage(error.message);
-      } else {
-        setMessage(
-          "Signup successful. Check your email."
-        );
-      }
+      router.push("/security");
     }
+
+    setLoading(false);
+  }
+
+  async function handleForgotPassword() {
+
+    if (!email) {
+      setErrorMsg(
+        "Enter your email first"
+      );
+      return;
+    }
+
+    const { error } =
+      await supabase.auth.resetPasswordForEmail(
+        email,
+        {
+          redirectTo:
+            "https://zds-secure-ai.vercel.app/auth",
+        }
+      );
+
+    if (error) {
+      setErrorMsg(error.message);
+      return;
+    }
+
+    setErrorMsg(
+      "Password reset email sent."
+    );
   }
 
   return (
-    <main className="min-h-screen bg-black text-white flex items-center justify-center">
 
-      <div className="bg-zinc-900 p-8 rounded-2xl w-full max-w-md border border-zinc-800">
+    <main className="min-h-screen bg-black flex items-center justify-center p-6">
 
-        <h1 className="text-3xl font-bold mb-6 text-center">
-          Sentinel AI Auth
+      <form
+        onSubmit={handleLogin}
+        className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 w-full max-w-sm"
+      >
+
+        <h1 className="text-3xl font-bold text-white mb-6 text-center">
+          ZDS Secure AI
         </h1>
 
         <input
           type="email"
           placeholder="Email"
-          className="w-full p-3 mb-4 rounded-xl bg-zinc-800"
           value={email}
           onChange={(e) =>
             setEmail(e.target.value)
           }
+          className="w-full p-3 rounded bg-zinc-800 text-white mb-4 outline-none"
+          required
         />
 
         <input
           type="password"
           placeholder="Password"
-          className="w-full p-3 mb-4 rounded-xl bg-zinc-800"
           value={password}
           onChange={(e) =>
-            setPassword(e.target.value)
+            setPassword(
+              e.target.value
+            )
           }
+          className="w-full p-3 rounded bg-zinc-800 text-white mb-4 outline-none"
+          required
         />
 
+        {errorMsg && (
+          <p className="text-red-500 mb-4 text-sm">
+            {errorMsg}
+          </p>
+        )}
+
         <button
-          className="w-full bg-blue-600 hover:bg-blue-700 p-3 rounded-xl"
-          onClick={handleAuth}
+          type="submit"
+          disabled={loading}
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded"
         >
-          {isLogin ? "Login" : "Sign Up"}
+
+          {loading
+            ? "Logging in..."
+            : "Login"}
+
         </button>
 
         <button
-          className="w-full mt-4 text-gray-400"
-          onClick={() =>
-            setIsLogin(!isLogin)
+          type="button"
+          onClick={
+            handleForgotPassword
           }
+          className="w-full mt-4 text-blue-400 text-sm"
         >
-          {isLogin
-            ? "Switch to Sign Up"
-            : "Switch to Login"}
+          Forgot Password?
         </button>
 
-        <p className="mt-4 text-center text-green-400">
-          {message}
-        </p>
-
-      </div>
+      </form>
 
     </main>
   );
 }
+
+
+
+
+
+
+
+
