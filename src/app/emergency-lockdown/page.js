@@ -5,43 +5,28 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function EmergencyLockdownPage() {
 
-  const [status, setStatus] =
-    useState("Normal");
+  const [activated, setActivated] =
+    useState(false);
 
-  const [logs, setLogs] =
-    useState([]);
+  const actions = [
+
+    "All active sessions revoked",
+
+    "Wallet connections isolated",
+
+    "Trusted devices locked",
+
+    "Browser sessions terminated",
+
+    "Emergency recovery mode enabled",
+
+    "AI containment protocols active",
+
+  ];
 
   function activateLockdown() {
 
-    setStatus("LOCKDOWN ACTIVE");
-
-    setLogs([
-
-      {
-        title:
-          "All Sessions Revoked",
-        level: "Critical",
-      },
-
-      {
-        title:
-          "Suspicious Devices Isolated",
-        level: "High",
-      },
-
-      {
-        title:
-          "AI Threat Containment Enabled",
-        level: "Protected",
-      },
-
-      {
-        title:
-          "Emergency Protection Activated",
-        level: "Protected",
-      },
-
-    ]);
+    setActivated(true);
 
   }
 
@@ -51,86 +36,97 @@ export default function EmergencyLockdownPage() {
 
       <main className="min-h-screen bg-black text-white p-6">
 
-        <h1 className="text-5xl font-bold mb-3">
-          Emergency Lockdown
-        </h1>
+        <div className="flex items-center justify-between mb-10">
 
-        <p className="text-zinc-400 mb-10">
-          AI-powered autonomous cyber defense and emergency containment system.
-        </p>
+          <div>
 
-        <div className={`rounded-2xl p-8 border mb-10 ${
-          status ===
-          "LOCKDOWN ACTIVE"
-            ? "bg-red-950 border-red-700"
-            : "bg-green-950 border-green-700"
-        }`}>
+            <h1 className="text-5xl font-bold mb-3">
+              Emergency Lockdown
+            </h1>
 
-          <h2 className="text-3xl font-bold mb-4">
-            Security Status
-          </h2>
+            <p className="text-zinc-400">
+              AI-powered emergency cyber defense and digital kill switch system.
+            </p>
 
-          <p className="text-5xl font-bold">
-            {status}
-          </p>
+          </div>
+
+          <div className="bg-red-500 text-white px-5 py-2 rounded-full font-bold">
+
+            CRITICAL DEFENSE READY
+
+          </div>
 
         </div>
 
-        <button
-          onClick={activateLockdown}
-          className="bg-red-600 hover:bg-red-700 transition px-8 py-5 rounded-2xl text-2xl font-bold mb-12"
-        >
+        {!activated ? (
 
-          Activate Emergency Lockdown
+          <div className="bg-zinc-900 border border-red-800 rounded-3xl p-10 text-center">
 
-        </button>
+            <h2 className="text-4xl font-bold mb-6">
+              Emergency Kill Switch
+            </h2>
 
-        <div className="grid gap-6">
+            <p className="text-zinc-400 text-xl mb-10">
+              Immediately isolate all risky sessions, wallets and connected assets.
+            </p>
 
-          {logs.map(
-            (item, index) => (
+            <button
+              onClick={activateLockdown}
+              className="bg-red-600 hover:bg-red-700 transition text-white text-2xl font-bold px-10 py-5 rounded-2xl"
+            >
 
-              <div
-                key={index}
-                className={`rounded-2xl p-6 border ${
-                  item.level ===
-                  "Critical"
-                    ? "bg-red-950 border-red-700"
-                    : item.level ===
-                      "High"
-                    ? "bg-orange-950 border-orange-700"
-                    : "bg-green-950 border-green-700"
-                }`}
-              >
+              ACTIVATE LOCKDOWN
 
-                <div className="flex items-center justify-between">
+            </button>
 
-                  <h2 className="text-2xl font-bold">
-                    {item.title}
-                  </h2>
+          </div>
 
-                  <span className={`px-4 py-1 rounded-full text-sm font-bold ${
-                    item.level ===
-                    "Critical"
-                      ? "bg-red-500 text-white"
-                      : item.level ===
-                        "High"
-                      ? "bg-orange-500 text-black"
-                      : "bg-green-500 text-black"
-                  }`}>
+        ) : (
 
-                    {item.level}
+          <div className="grid gap-6">
 
-                  </span>
+            <div className="bg-red-950 border border-red-700 rounded-3xl p-8">
+
+              <h2 className="text-5xl font-bold mb-5">
+                LOCKDOWN ACTIVE
+              </h2>
+
+              <p className="text-red-200 text-xl">
+                AI emergency containment protocols are now active.
+              </p>
+
+            </div>
+
+            {actions.map(
+              (action, index) => (
+
+                <div
+                  key={index}
+                  className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6"
+                >
+
+                  <div className="flex items-center justify-between">
+
+                    <h2 className="text-2xl font-bold">
+                      {action}
+                    </h2>
+
+                    <span className="bg-green-500 text-black px-4 py-1 rounded-full text-sm font-bold">
+
+                      COMPLETE
+
+                    </span>
+
+                  </div>
 
                 </div>
 
-              </div>
+              )
+            )}
 
-            )
-          )}
+          </div>
 
-        </div>
+        )}
 
       </main>
 
