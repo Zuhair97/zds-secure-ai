@@ -4,75 +4,89 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function ThreatIntelligencePage() {
 
-  const feeds = [
+  const intelligence = [
 
     {
-      title:
-        "Phishing Infrastructure",
-      severity: "High",
-      source:
-        "Global Threat Feed",
-      description:
-        "AI detected activity patterns matching known phishing campaigns.",
+      region:
+        "North America",
+      status:
+        "Monitoring",
+      details:
+        "AI analyzing phishing and credential theft infrastructure.",
     },
 
     {
-      title:
-        "Suspicious Geo Activity",
-      severity:
-        "Medium",
-      source:
-        "Geo Intelligence",
-      description:
-        "Multiple risky authentication attempts detected from high-risk regions.",
+      region:
+        "Europe",
+      status:
+        "Protected",
+      details:
+        "Distributed malware intelligence systems operational.",
     },
 
     {
-      title:
-        "Credential Attack Pattern",
-      severity: "Critical",
-      source:
-        "AI Correlation Engine",
-      description:
-        "Behavioral patterns resemble credential stuffing activity.",
+      region:
+        "Africa",
+      status:
+        "Live",
+      details:
+        "Localized AI cybersecurity telemetry and attack monitoring active.",
     },
 
     {
-      title:
-        "Device Reputation Alert",
-      severity:
-        "Medium",
-      source:
-        "Device Trust Engine",
-      description:
-        "Unknown device behavior deviates from trusted session history.",
+      region:
+        "Asia-Pacific",
+      status:
+        "Analyzing",
+      details:
+        "Real-time suspicious activity pattern recognition operational.",
     },
 
   ];
+
+  function getColor(status) {
+
+    switch (status) {
+
+      case "Monitoring":
+        return "bg-yellow-500 text-black";
+
+      case "Protected":
+        return "bg-green-500 text-black";
+
+      case "Live":
+        return "bg-red-500 text-white";
+
+      default:
+        return "bg-cyan-500 text-black";
+
+    }
+
+  }
 
   return (
 
     <ProtectedRoute>
 
-      <main className="min-h-screen bg-black text-white p-6">
+      <main className="min-h-screen bg-gradient-to-br from-black via-zinc-950 to-red-950 text-white p-6">
 
         <div className="flex items-center justify-between mb-10">
 
           <div>
 
-            <h1 className="text-5xl font-bold mb-3">
-              AI Threat Intelligence
+            <h1 className="text-5xl font-extrabold mb-4 bg-gradient-to-r from-red-400 to-cyan-400 text-transparent bg-clip-text">
+              Threat Intelligence Network
             </h1>
 
-            <p className="text-zinc-400">
-              Real-time AI-powered cyber intelligence and threat correlation.
+            <p className="text-zinc-300 text-lg">
+              Global AI cybersecurity intelligence and real-time worldwide threat monitoring.
             </p>
 
           </div>
 
-          <div className="bg-red-500 text-white px-5 py-2 rounded-full font-bold">
+          <div className="bg-red-500 text-white px-5 py-2 rounded-full font-bold shadow-lg shadow-red-500/40">
 
-            LIVE FEED
+            GLOBAL INTEL LIVE
 
           </div>
 
@@ -80,56 +94,32 @@ export default function ThreatIntelligencePage() {
 
         <div className="grid gap-6">
 
-          {feeds.map(
+          {intelligence.map(
             (item, index) => (
 
               <div
                 key={index}
-                className={`rounded-2xl p-6 border ${
-                  item.severity ===
-                  "Critical"
-                    ? "bg-red-950 border-red-700"
-                    : item.severity ===
-                      "High"
-                    ? "bg-orange-950 border-orange-700"
-                    : "bg-yellow-950 border-yellow-700"
-                }`}
+                className="backdrop-blur-xl bg-white/5 border border-red-500/20 rounded-3xl p-6 shadow-2xl shadow-red-500/10"
               >
 
                 <div className="flex items-center justify-between mb-5">
 
                   <h2 className="text-3xl font-bold">
-                    {item.title}
+                    {item.region}
                   </h2>
 
-                  <span className={`px-4 py-1 rounded-full text-sm font-bold ${
-                    item.severity ===
-                    "Critical"
-                      ? "bg-red-500 text-white"
-                      : item.severity ===
-                        "High"
-                      ? "bg-orange-500 text-black"
-                      : "bg-yellow-500 text-black"
-                  }`}>
+                  <span className={`px-4 py-1 rounded-full text-sm font-bold ${getColor(item.status)}`}>
 
-                    {item.severity}
+                    {item.status}
 
                   </span>
 
                 </div>
 
-                <p className="text-zinc-300 mb-5 text-lg leading-8">
-                  {item.description}
-                </p>
+                <div className="bg-black/40 border border-zinc-800 rounded-2xl p-5">
 
-                <div className="bg-black border border-zinc-800 rounded-xl p-4">
-
-                  <p className="text-zinc-400">
-                    Intelligence Source:
-                    {" "}
-                    <span className="font-bold text-white">
-                      {item.source}
-                    </span>
+                  <p className="text-zinc-300 text-lg leading-8">
+                    {item.details}
                   </p>
 
                 </div>
