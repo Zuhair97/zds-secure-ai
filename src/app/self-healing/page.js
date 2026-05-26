@@ -4,42 +4,42 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function SelfHealingPage() {
 
-  const systems = [
+  const healingSystems = [
 
     {
       feature:
-        "Automatic Infrastructure Recovery",
+        "Autonomous Recovery Engine",
       status:
         "Operational",
       details:
-        "AI restoring cybersecurity services automatically after failure.",
+        "AI autonomously restoring disrupted services and infrastructure continuity.",
     },
 
     {
       feature:
-        "Threat Rollback Engine",
+        "Infrastructure Isolation",
       status:
         "Protected",
       details:
-        "Autonomous rollback systems reversing malicious activity.",
+        "Compromised infrastructure automatically isolated to prevent spread.",
     },
 
     {
       feature:
-        "Resilience Monitoring",
+        "Backup Restoration Intelligence",
+      status:
+        "Analyzing",
+      details:
+        "AI coordinating secure rollback and distributed backup recovery systems.",
+    },
+
+    {
+      feature:
+        "Machine-Speed Self-Healing",
       status:
         "Live",
       details:
-        "Continuous AI system health and infrastructure analysis active.",
-    },
-
-    {
-      feature:
-        "Backup Restoration Systems",
-      status:
-        "Synchronized",
-      details:
-        "Distributed cloud backup recovery infrastructure operational.",
+        "Real-time autonomous cyber resilience and self-healing infrastructure active.",
     },
 
   ];
@@ -52,13 +52,13 @@ export default function SelfHealingPage() {
         return "bg-green-500 text-black";
 
       case "Protected":
+        return "bg-cyan-500 text-black";
+
+      case "Analyzing":
         return "bg-yellow-500 text-black";
 
-      case "Live":
-        return "bg-red-500 text-white";
-
       default:
-        return "bg-cyan-500 text-black";
+        return "bg-red-500 text-white";
 
     }
 
@@ -68,23 +68,23 @@ export default function SelfHealingPage() {
 
     <ProtectedRoute>
 
-      <main className="min-h-screen bg-gradient-to-br from-black via-zinc-950 to-lime-950 text-white p-6">
+      <main className="min-h-screen bg-gradient-to-br from-black via-zinc-950 to-emerald-950 text-white p-6">
 
         <div className="flex items-center justify-between mb-10">
 
           <div>
 
-            <h1 className="text-5xl font-extrabold mb-4 bg-gradient-to-r from-lime-400 to-cyan-400 text-transparent bg-clip-text">
-              Self-Healing Systems
+            <h1 className="text-5xl font-extrabold mb-4 bg-gradient-to-r from-emerald-400 to-cyan-400 text-transparent bg-clip-text">
+              Self-Healing Infrastructure
             </h1>
 
             <p className="text-zinc-300 text-lg">
-              Autonomous AI recovery and self-healing cybersecurity infrastructure.
+              AI-powered cyber recovery, autonomous resilience, and machine-speed infrastructure restoration.
             </p>
 
           </div>
 
-          <div className="bg-lime-500 text-black px-5 py-2 rounded-full font-bold shadow-lg shadow-lime-500/40">
+          <div className="bg-emerald-500 text-black px-5 py-2 rounded-full font-bold shadow-lg shadow-emerald-500/40">
 
             SELF-HEALING ACTIVE
 
@@ -94,12 +94,12 @@ export default function SelfHealingPage() {
 
         <div className="grid gap-6">
 
-          {systems.map(
+          {healingSystems.map(
             (item, index) => (
 
               <div
                 key={index}
-                className="backdrop-blur-xl bg-white/5 border border-lime-500/20 rounded-3xl p-6 shadow-2xl shadow-lime-500/10"
+                className="backdrop-blur-xl bg-white/5 border border-emerald-500/20 rounded-3xl p-6 shadow-2xl shadow-emerald-500/10"
               >
 
                 <div className="flex items-center justify-between mb-5">
