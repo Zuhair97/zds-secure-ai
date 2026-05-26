@@ -4,42 +4,42 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function QuantumSecurityPage() {
 
-  const systems = [
+  const quantumSystems = [
 
     {
       feature:
-        "Post-Quantum Cryptography",
+        "Post-Quantum Preparation",
       status:
         "Operational",
       details:
-        "Quantum-resistant encryption infrastructure initialized.",
+        "AI analyzing infrastructure readiness for post-quantum cybersecurity migration.",
     },
 
     {
       feature:
-        "Quantum-Safe Identity Protection",
+        "Cryptographic Intelligence",
       status:
         "Protected",
       details:
-        "Advanced future-proof authentication systems active.",
+        "Continuous monitoring of encryption integrity and cryptographic risks.",
     },
 
     {
       feature:
-        "AI Cryptographic Monitoring",
+        "Quantum Threat Forecasting",
+      status:
+        "Analyzing",
+      details:
+        "AI forecasting future cryptographic vulnerabilities and emerging risks.",
+    },
+
+    {
+      feature:
+        "Adaptive Encryption Defense",
       status:
         "Live",
       details:
-        "AI continuously analyzing encryption resilience and integrity.",
-    },
-
-    {
-      feature:
-        "Quantum-Ready Communication",
-      status:
-        "Synchronized",
-      details:
-        "Secure future communication channels prepared for next-generation threats.",
+        "Autonomous encryption resilience and future-proof security infrastructure active.",
     },
 
   ];
@@ -52,13 +52,13 @@ export default function QuantumSecurityPage() {
         return "bg-green-500 text-black";
 
       case "Protected":
+        return "bg-cyan-500 text-black";
+
+      case "Analyzing":
         return "bg-yellow-500 text-black";
 
-      case "Live":
-        return "bg-red-500 text-white";
-
       default:
-        return "bg-cyan-500 text-black";
+        return "bg-red-500 text-white";
 
     }
 
@@ -68,23 +68,23 @@ export default function QuantumSecurityPage() {
 
     <ProtectedRoute>
 
-      <main className="min-h-screen bg-gradient-to-br from-black via-zinc-950 to-violet-950 text-white p-6">
+      <main className="min-h-screen bg-gradient-to-br from-black via-zinc-950 to-slate-950 text-white p-6">
 
         <div className="flex items-center justify-between mb-10">
 
           <div>
 
-            <h1 className="text-5xl font-extrabold mb-4 bg-gradient-to-r from-violet-400 to-cyan-400 text-transparent bg-clip-text">
+            <h1 className="text-5xl font-extrabold mb-4 bg-gradient-to-r from-slate-300 to-cyan-400 text-transparent bg-clip-text">
               Quantum Security
             </h1>
 
             <p className="text-zinc-300 text-lg">
-              Quantum-resistant AI cybersecurity and future-proof encryption infrastructure.
+              AI-powered post-quantum cybersecurity and future-proof cryptographic infrastructure.
             </p>
 
           </div>
 
-          <div className="bg-violet-500 text-white px-5 py-2 rounded-full font-bold shadow-lg shadow-violet-500/40">
+          <div className="bg-slate-300 text-black px-5 py-2 rounded-full font-bold shadow-lg shadow-slate-300/40">
 
             QUANTUM READY
 
@@ -94,12 +94,12 @@ export default function QuantumSecurityPage() {
 
         <div className="grid gap-6">
 
-          {systems.map(
+          {quantumSystems.map(
             (item, index) => (
 
               <div
                 key={index}
-                className="backdrop-blur-xl bg-white/5 border border-violet-500/20 rounded-3xl p-6 shadow-2xl shadow-violet-500/10"
+                className="backdrop-blur-xl bg-white/5 border border-slate-400/20 rounded-3xl p-6 shadow-2xl shadow-slate-400/10"
               >
 
                 <div className="flex items-center justify-between mb-5">
