@@ -4,42 +4,42 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function QuantumSecurityPage() {
 
-  const protocols = [
+  const systems = [
 
     {
-      protocol:
-        "Post-Quantum Encryption",
+      feature:
+        "Post-Quantum Cryptography",
       status:
-        "Active",
-      description:
-        "Quantum-resistant encryption integrity verified successfully.",
+        "Operational",
+      details:
+        "Quantum-resistant encryption infrastructure initialized.",
     },
 
     {
-      protocol:
-        "Quantum-Safe Wallet Security",
+      feature:
+        "Quantum-Safe Identity Protection",
       status:
         "Protected",
-      description:
-        "AI monitoring future cryptographic exposure risks.",
+      details:
+        "Advanced future-proof authentication systems active.",
     },
 
     {
-      protocol:
-        "Decentralized Identity Encryption",
+      feature:
+        "AI Cryptographic Monitoring",
       status:
-        "Secured",
-      description:
-        "Zero-trust DID cryptographic protection enabled.",
+        "Live",
+      details:
+        "AI continuously analyzing encryption resilience and integrity.",
     },
 
     {
-      protocol:
-        "Future Threat Analysis",
+      feature:
+        "Quantum-Ready Communication",
       status:
-        "Scanning",
-      description:
-        "AI analyzing quantum-era cybersecurity threat models.",
+        "Synchronized",
+      details:
+        "Secure future communication channels prepared for next-generation threats.",
     },
 
   ];
@@ -48,17 +48,17 @@ export default function QuantumSecurityPage() {
 
     switch (status) {
 
-      case "Active":
+      case "Operational":
         return "bg-green-500 text-black";
 
       case "Protected":
-        return "bg-cyan-500 text-black";
-
-      case "Scanning":
         return "bg-yellow-500 text-black";
 
+      case "Live":
+        return "bg-red-500 text-white";
+
       default:
-        return "bg-purple-500 text-white";
+        return "bg-cyan-500 text-black";
 
     }
 
@@ -68,25 +68,25 @@ export default function QuantumSecurityPage() {
 
     <ProtectedRoute>
 
-      <main className="min-h-screen bg-black text-white p-6">
+      <main className="min-h-screen bg-gradient-to-br from-black via-zinc-950 to-violet-950 text-white p-6">
 
         <div className="flex items-center justify-between mb-10">
 
           <div>
 
-            <h1 className="text-5xl font-bold mb-3">
+            <h1 className="text-5xl font-extrabold mb-4 bg-gradient-to-r from-violet-400 to-cyan-400 text-transparent bg-clip-text">
               Quantum Security
             </h1>
 
-            <p className="text-zinc-400">
-              AI-powered post-quantum cybersecurity and future-proof encryption defense.
+            <p className="text-zinc-300 text-lg">
+              Quantum-resistant AI cybersecurity and future-proof encryption infrastructure.
             </p>
 
           </div>
 
-          <div className="bg-cyan-500 text-black px-5 py-2 rounded-full font-bold">
+          <div className="bg-violet-500 text-white px-5 py-2 rounded-full font-bold shadow-lg shadow-violet-500/40">
 
-            QUANTUM DEFENSE ACTIVE
+            QUANTUM READY
 
           </div>
 
@@ -94,18 +94,18 @@ export default function QuantumSecurityPage() {
 
         <div className="grid gap-6">
 
-          {protocols.map(
+          {systems.map(
             (item, index) => (
 
               <div
                 key={index}
-                className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6"
+                className="backdrop-blur-xl bg-white/5 border border-violet-500/20 rounded-3xl p-6 shadow-2xl shadow-violet-500/10"
               >
 
                 <div className="flex items-center justify-between mb-5">
 
                   <h2 className="text-3xl font-bold">
-                    {item.protocol}
+                    {item.feature}
                   </h2>
 
                   <span className={`px-4 py-1 rounded-full text-sm font-bold ${getColor(item.status)}`}>
@@ -116,10 +116,10 @@ export default function QuantumSecurityPage() {
 
                 </div>
 
-                <div className="bg-black border border-zinc-800 rounded-xl p-5">
+                <div className="bg-black/40 border border-zinc-800 rounded-2xl p-5">
 
                   <p className="text-zinc-300 text-lg leading-8">
-                    {item.description}
+                    {item.details}
                   </p>
 
                 </div>
