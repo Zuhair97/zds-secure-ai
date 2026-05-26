@@ -4,42 +4,42 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function PredictiveDefensePage() {
 
-  const predictions = [
+  const forecasts = [
 
     {
-      system:
-        "Phishing Prediction Engine",
-      status:
-        "Analyzing",
-      details:
-        "AI forecasting suspicious phishing campaigns before execution.",
-    },
-
-    {
-      system:
-        "Behavioral Risk Analysis",
+      feature:
+        "Threat Forecasting Engine",
       status:
         "Operational",
       details:
-        "Machine-learning anomaly detection systems active.",
+        "AI analyzing behavioral patterns and predicting cyber attack probability.",
     },
 
     {
-      system:
-        "Wallet Threat Forecasting",
+      feature:
+        "Early Warning Alerts",
       status:
         "Protected",
       details:
-        "AI predicting high-risk Web3 interactions and exploits.",
+        "Machine-speed predictive alerts against emerging threats and suspicious activity.",
     },
 
     {
-      system:
-        "Attack Probability Scoring",
+      feature:
+        "Anomaly Trend Intelligence",
+      status:
+        "Analyzing",
+      details:
+        "AI correlating telemetry trends and identifying pre-attack indicators.",
+    },
+
+    {
+      feature:
+        "Autonomous Risk Prediction",
       status:
         "Live",
       details:
-        "Real-time AI attack likelihood assessment operational.",
+        "Continuous forecasting of phishing, malware, and fraud campaigns globally.",
     },
 
   ];
@@ -48,14 +48,14 @@ export default function PredictiveDefensePage() {
 
     switch (status) {
 
-      case "Analyzing":
-        return "bg-yellow-500 text-black";
-
       case "Operational":
-        return "bg-cyan-500 text-black";
+        return "bg-green-500 text-black";
 
       case "Protected":
-        return "bg-green-500 text-black";
+        return "bg-cyan-500 text-black";
+
+      case "Analyzing":
+        return "bg-yellow-500 text-black";
 
       default:
         return "bg-red-500 text-white";
@@ -79,14 +79,14 @@ export default function PredictiveDefensePage() {
             </h1>
 
             <p className="text-zinc-300 text-lg">
-              AI-powered predictive cybersecurity and future attack forecasting systems.
+              AI-powered cyber forecasting and autonomous early warning infrastructure.
             </p>
 
           </div>
 
           <div className="bg-fuchsia-500 text-white px-5 py-2 rounded-full font-bold shadow-lg shadow-fuchsia-500/40">
 
-            PREDICTION ACTIVE
+            FORECAST ACTIVE
 
           </div>
 
@@ -94,7 +94,7 @@ export default function PredictiveDefensePage() {
 
         <div className="grid gap-6">
 
-          {predictions.map(
+          {forecasts.map(
             (item, index) => (
 
               <div
@@ -105,7 +105,7 @@ export default function PredictiveDefensePage() {
                 <div className="flex items-center justify-between mb-5">
 
                   <h2 className="text-3xl font-bold">
-                    {item.system}
+                    {item.feature}
                   </h2>
 
                   <span className={`px-4 py-1 rounded-full text-sm font-bold ${getColor(item.status)}`}>
