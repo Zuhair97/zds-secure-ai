@@ -4,42 +4,42 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function AISOCPage() {
 
-  const systems = [
+  const operations = [
 
     {
       feature:
-        "AI Alert Triage",
+        "Global Threat Telemetry",
       status:
         "Operational",
       details:
-        "AI automatically prioritizing cybersecurity alerts in real time.",
+        "AI collecting and correlating distributed cybersecurity telemetry worldwide.",
     },
 
     {
       feature:
-        "Threat Hunting Engine",
-      status:
-        "Live",
-      details:
-        "Autonomous AI threat hunting and anomaly detection systems active.",
-    },
-
-    {
-      feature:
-        "Telemetry Correlation",
-      status:
-        "Analyzing",
-      details:
-        "Distributed telemetry and behavioral event correlation operational.",
-    },
-
-    {
-      feature:
-        "Incident Orchestration",
+        "Autonomous Incident Coordination",
       status:
         "Protected",
       details:
-        "Machine-speed AI incident response and containment infrastructure active.",
+        "Machine-speed orchestration of AI defense agents and mitigation systems.",
+    },
+
+    {
+      feature:
+        "Threat Visualization Engine",
+      status:
+        "Analyzing",
+      details:
+        "Real-time cyber attack heatmaps and intelligent infrastructure monitoring active.",
+    },
+
+    {
+      feature:
+        "Distributed AI Defense Network",
+      status:
+        "Live",
+      details:
+        "Global autonomous AI defense coordination and cyber resilience operational.",
     },
 
   ];
@@ -51,14 +51,14 @@ export default function AISOCPage() {
       case "Operational":
         return "bg-green-500 text-black";
 
-      case "Live":
-        return "bg-red-500 text-white";
+      case "Protected":
+        return "bg-cyan-500 text-black";
 
       case "Analyzing":
         return "bg-yellow-500 text-black";
 
       default:
-        return "bg-cyan-500 text-black";
+        return "bg-red-500 text-white";
 
     }
 
@@ -68,23 +68,23 @@ export default function AISOCPage() {
 
     <ProtectedRoute>
 
-      <main className="min-h-screen bg-gradient-to-br from-black via-zinc-950 to-teal-950 text-white p-6">
+      <main className="min-h-screen bg-gradient-to-br from-black via-zinc-950 to-red-950 text-white p-6">
 
         <div className="flex items-center justify-between mb-10">
 
           <div>
 
-            <h1 className="text-5xl font-extrabold mb-4 bg-gradient-to-r from-teal-400 to-cyan-400 text-transparent bg-clip-text">
+            <h1 className="text-5xl font-extrabold mb-4 bg-gradient-to-r from-red-400 to-cyan-400 text-transparent bg-clip-text">
               AI Security Operations Center
             </h1>
 
             <p className="text-zinc-300 text-lg">
-              Autonomous AI-powered cybersecurity operations and machine-speed defense infrastructure.
+              Centralized AI cybersecurity intelligence, autonomous defense, and global threat coordination.
             </p>
 
           </div>
 
-          <div className="bg-teal-500 text-black px-5 py-2 rounded-full font-bold shadow-lg shadow-teal-500/40">
+          <div className="bg-red-500 text-white px-5 py-2 rounded-full font-bold shadow-lg shadow-red-500/40">
 
             AI-SOC ACTIVE
 
@@ -94,12 +94,12 @@ export default function AISOCPage() {
 
         <div className="grid gap-6">
 
-          {systems.map(
+          {operations.map(
             (item, index) => (
 
               <div
                 key={index}
-                className="backdrop-blur-xl bg-white/5 border border-teal-500/20 rounded-3xl p-6 shadow-2xl shadow-teal-500/10"
+                className="backdrop-blur-xl bg-white/5 border border-red-500/20 rounded-3xl p-6 shadow-2xl shadow-red-500/10"
               >
 
                 <div className="flex items-center justify-between mb-5">
