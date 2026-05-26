@@ -8,38 +8,38 @@ export default function ZeroTrustPage() {
 
     {
       feature:
-        "Continuous Identity Verification",
+        "Continuous Authentication",
       status:
         "Operational",
       details:
-        "AI continuously validating user and session integrity.",
+        "AI continuously validating user identity and behavioral integrity.",
     },
 
     {
       feature:
-        "Device Trust Scoring",
+        "Device Trust Intelligence",
       status:
         "Protected",
       details:
-        "Behavioral AI assigning dynamic trust scores to devices.",
+        "Dynamic device trust scoring and suspicious endpoint monitoring active.",
     },
 
     {
       feature:
         "Adaptive Access Control",
       status:
-        "Live",
+        "Analyzing",
       details:
-        "Autonomous access permissions adjusting based on risk analysis.",
+        "AI-driven privilege management and contextual access verification operational.",
     },
 
     {
       feature:
-        "Machine Identity Governance",
+        "Session Threat Detection",
       status:
-        "Synchronized",
+        "Live",
       details:
-        "AI agents and machine identities monitored securely.",
+        "Real-time session anomaly analysis and autonomous restriction systems active.",
     },
 
   ];
@@ -52,13 +52,13 @@ export default function ZeroTrustPage() {
         return "bg-green-500 text-black";
 
       case "Protected":
+        return "bg-cyan-500 text-black";
+
+      case "Analyzing":
         return "bg-yellow-500 text-black";
 
-      case "Live":
-        return "bg-red-500 text-white";
-
       default:
-        return "bg-cyan-500 text-black";
+        return "bg-red-500 text-white";
 
     }
 
@@ -68,23 +68,23 @@ export default function ZeroTrustPage() {
 
     <ProtectedRoute>
 
-      <main className="min-h-screen bg-gradient-to-br from-black via-zinc-950 to-blue-950 text-white p-6">
+      <main className="min-h-screen bg-gradient-to-br from-black via-zinc-950 to-neutral-950 text-white p-6">
 
         <div className="flex items-center justify-between mb-10">
 
           <div>
 
-            <h1 className="text-5xl font-extrabold mb-4 bg-gradient-to-r from-blue-400 to-cyan-400 text-transparent bg-clip-text">
-              Zero Trust Security
+            <h1 className="text-5xl font-extrabold mb-4 bg-gradient-to-r from-neutral-300 to-cyan-400 text-transparent bg-clip-text">
+              Zero Trust Architecture
             </h1>
 
             <p className="text-zinc-300 text-lg">
-              Autonomous AI zero-trust cybersecurity and continuous verification infrastructure.
+              AI-powered zero-trust cybersecurity and continuous identity verification infrastructure.
             </p>
 
           </div>
 
-          <div className="bg-blue-500 text-white px-5 py-2 rounded-full font-bold shadow-lg shadow-blue-500/40">
+          <div className="bg-neutral-300 text-black px-5 py-2 rounded-full font-bold shadow-lg shadow-neutral-300/40">
 
             ZERO TRUST ACTIVE
 
@@ -99,7 +99,7 @@ export default function ZeroTrustPage() {
 
               <div
                 key={index}
-                className="backdrop-blur-xl bg-white/5 border border-blue-500/20 rounded-3xl p-6 shadow-2xl shadow-blue-500/10"
+                className="backdrop-blur-xl bg-white/5 border border-neutral-400/20 rounded-3xl p-6 shadow-2xl shadow-neutral-400/10"
               >
 
                 <div className="flex items-center justify-between mb-5">
