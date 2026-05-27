@@ -4,61 +4,58 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function ThreatIntelligencePage() {
 
-  const intelligence = [
+  const alerts = [
+
+    {
+      region:
+        "Global Crypto Networks",
+      level:
+        "HIGH",
+      details:
+        "AI detected coordinated phishing infrastructure targeting Web3 users.",
+    },
 
     {
       region:
         "North America",
-      status:
-        "Monitoring",
+      level:
+        "MEDIUM",
       details:
-        "AI analyzing phishing and credential theft infrastructure.",
+        "Suspicious scam-token campaigns observed across multiple platforms.",
     },
 
     {
       region:
         "Europe",
-      status:
-        "Protected",
+      level:
+        "LOW",
       details:
-        "Distributed malware intelligence systems operational.",
+        "Increased malicious wallet-drainer activity under monitoring.",
     },
 
     {
       region:
         "Africa",
-      status:
-        "Live",
+      level:
+        "HIGH",
       details:
-        "Localized AI cybersecurity telemetry and attack monitoring active.",
-    },
-
-    {
-      region:
-        "Asia-Pacific",
-      status:
-        "Analyzing",
-      details:
-        "Real-time suspicious activity pattern recognition operational.",
+        "AI identified fraudulent investment and impersonation campaigns.",
     },
 
   ];
 
-  function getColor(status) {
+  function getColor(level) {
 
-    switch (status) {
+    switch (level) {
 
-      case "Monitoring":
-        return "bg-yellow-500 text-black";
-
-      case "Protected":
-        return "bg-green-500 text-black";
-
-      case "Live":
+      case "HIGH":
         return "bg-red-500 text-white";
 
+      case "MEDIUM":
+        return "bg-yellow-500 text-black";
+
       default:
-        return "bg-cyan-500 text-black";
+        return "bg-green-500 text-black";
 
     }
 
@@ -68,66 +65,54 @@ export default function ThreatIntelligencePage() {
 
     <ProtectedRoute>
 
-      <main className="min-h-screen bg-gradient-to-br from-black via-zinc-950 to-red-950 text-white p-6">
+      <main className="min-h-screen bg-gradient-to-br from-black via-zinc-950 to-indigo-950 text-white p-6">
 
-        <div className="flex items-center justify-between mb-10">
+        <div className="mb-10">
 
-          <div>
+          <h1 className="text-5xl font-extrabold mb-4 bg-gradient-to-r from-indigo-400 to-cyan-400 text-transparent bg-clip-text">
+            AI Threat Intelligence Network
+          </h1>
 
-            <h1 className="text-5xl font-extrabold mb-4 bg-gradient-to-r from-red-400 to-cyan-400 text-transparent bg-clip-text">
-              Threat Intelligence Network
-            </h1>
-
-            <p className="text-zinc-300 text-lg">
-              Global AI cybersecurity intelligence and real-time worldwide threat monitoring.
-            </p>
-
-          </div>
-
-          <div className="bg-red-500 text-white px-5 py-2 rounded-full font-bold shadow-lg shadow-red-500/40">
-
-            GLOBAL INTEL LIVE
-
-          </div>
+          <p className="text-zinc-300 text-lg">
+            Global AI-powered cyber awareness and threat intelligence infrastructure.
+          </p>
 
         </div>
 
         <div className="grid gap-6">
 
-          {intelligence.map(
-            (item, index) => (
+          {alerts.map((item, index) => (
 
-              <div
-                key={index}
-                className="backdrop-blur-xl bg-white/5 border border-red-500/20 rounded-3xl p-6 shadow-2xl shadow-red-500/10"
-              >
+            <div
+              key={index}
+              className="bg-white/5 border border-indigo-500/20 rounded-3xl p-6 backdrop-blur-xl shadow-2xl shadow-indigo-500/10"
+            >
 
-                <div className="flex items-center justify-between mb-5">
+              <div className="flex items-center justify-between mb-5">
 
-                  <h2 className="text-3xl font-bold">
-                    {item.region}
-                  </h2>
+                <h2 className="text-3xl font-bold">
+                  {item.region}
+                </h2>
 
-                  <span className={`px-4 py-1 rounded-full text-sm font-bold ${getColor(item.status)}`}>
+                <span className={`px-4 py-1 rounded-full text-sm font-bold ${getColor(item.level)}`}>
 
-                    {item.status}
+                  {item.level}
 
-                  </span>
-
-                </div>
-
-                <div className="bg-black/40 border border-zinc-800 rounded-2xl p-5">
-
-                  <p className="text-zinc-300 text-lg leading-8">
-                    {item.details}
-                  </p>
-
-                </div>
+                </span>
 
               </div>
 
-            )
-          )}
+              <div className="bg-black/40 border border-zinc-800 rounded-2xl p-5">
+
+                <p className="text-zinc-300 text-lg leading-8">
+                  {item.details}
+                </p>
+
+              </div>
+
+            </div>
+
+          ))}
 
         </div>
 
