@@ -1,146 +1,115 @@
 "use client";
 
-import Link from "next/link";
 import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function CommandCenterPage() {
 
-  const modules = [
+  const systems = [
 
     {
-      title:
-        "Security Operations Center",
-      path: "/soc",
-      status: "Active",
+      name: "AI Threat Intelligence",
+      status: "ACTIVE",
     },
 
     {
-      title:
-        "Threat Intelligence",
-      path:
-        "/threat-intelligence",
-      status: "Live",
+      name: "Fraud Protection",
+      status: "SECURED",
     },
 
     {
-      title:
-        "Geo-Risk Intelligence",
-      path: "/geo-risk",
-      status: "Monitoring",
+      name: "Wallet Defense",
+      status: "MONITORING",
     },
 
     {
-      title:
-        "Trusted Devices",
-      path:
-        "/trusted-devices",
-      status: "Protected",
+      name: "Trading Guardian",
+      status: "ACTIVE",
     },
 
     {
-      title:
-        "Session Intelligence",
-      path:
-        "/session-intelligence",
-      status: "Active",
+      name: "Identity Protection",
+      status: "SECURED",
     },
 
     {
-      title:
-        "AI Alert Center",
-      path: "/ai-alerts",
-      status: "Live",
-    },
-
-    {
-      title:
-        "Emergency Lockdown",
-      path:
-        "/emergency-lockdown",
-      status: "Ready",
-    },
-
-    {
-      title:
-        "Predictive Analytics",
-      path:
-        "/predictive-analytics",
-      status: "Forecasting",
-    },
-
-    {
-      title:
-        "Autonomous AI Defense",
-      path: "/ai-defense",
-      status: "AI Active",
+      name: "Autonomous Defense",
+      status: "READY",
     },
 
   ];
+
+  function getColor(status) {
+
+    switch (status) {
+
+      case "ACTIVE":
+        return "bg-green-500 text-black";
+
+      case "SECURED":
+        return "bg-cyan-500 text-black";
+
+      case "MONITORING":
+        return "bg-yellow-500 text-black";
+
+      default:
+        return "bg-red-500 text-white";
+
+    }
+
+  }
 
   return (
 
     <ProtectedRoute>
 
-      <main className="min-h-screen bg-black text-white p-6">
+      <main className="min-h-screen bg-gradient-to-br from-black via-zinc-950 to-slate-950 text-white p-6">
 
-        <div className="flex items-center justify-between mb-12">
+        <div className="mb-10">
 
-          <div>
+          <h1 className="text-5xl font-extrabold mb-4 bg-gradient-to-r from-cyan-400 to-slate-300 text-transparent bg-clip-text">
+            AI Command Center
+          </h1>
 
-            <h1 className="text-6xl font-bold mb-4">
-              ZDS AI Command Center
-            </h1>
-
-            <p className="text-zinc-400 text-lg">
-              Unified AI-powered cybersecurity ecosystem and command platform.
-            </p>
-
-          </div>
-
-          <div className="bg-green-500 text-black px-6 py-3 rounded-full font-bold text-lg">
-
-            ALL SYSTEMS ACTIVE
-
-          </div>
+          <p className="text-zinc-300 text-lg">
+            Unified global AI cybersecurity operations and autonomous defense hub.
+          </p>
 
         </div>
 
-        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 gap-6">
 
-          {modules.map(
-            (module, index) => (
+          {systems.map((item, index) => (
 
-              <Link
-                key={index}
-                href={module.path}
-              >
+            <div
+              key={index}
+              className="bg-white/5 border border-cyan-500/20 rounded-3xl p-6 backdrop-blur-xl shadow-2xl shadow-cyan-500/10"
+            >
 
-                <div className="bg-zinc-900 hover:bg-zinc-800 transition border border-zinc-800 rounded-2xl p-6 cursor-pointer h-full">
+              <div className="flex items-center justify-between mb-5">
 
-                  <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold">
+                  {item.name}
+                </h2>
 
-                    <h2 className="text-2xl font-bold">
-                      {module.title}
-                    </h2>
+                <span className={`px-4 py-1 rounded-full text-sm font-bold ${getColor(item.status)}`}>
 
-                    <span className="bg-blue-500 text-black px-3 py-1 rounded-full text-sm font-bold">
+                  {item.status}
 
-                      {module.status}
+                </span>
 
-                    </span>
+              </div>
 
-                  </div>
+              <div className="bg-black/40 border border-zinc-800 rounded-2xl p-5">
 
-                  <p className="text-zinc-400 leading-7">
-                    AI-powered cybersecurity intelligence, monitoring, and autonomous defense systems.
-                  </p>
+                <p className="text-zinc-300 text-lg">
+                  AI operational monitoring and autonomous protection systems active.
+                </p>
 
-                </div>
+              </div>
 
-              </Link>
+            </div>
 
-            )
-          )}
+          ))}
 
         </div>
 
