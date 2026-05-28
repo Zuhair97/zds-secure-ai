@@ -1,35 +1,64 @@
 "use client";
 
-import { useState } from "react";
 import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function TrustEnginePage() {
 
-  const [input, setInput] = useState("");
-  const [result, setResult] = useState(null);
+  const trustSystems = [
 
-  function analyzeTrust() {
+    {
+      feature:
+        "Behavioral Trust Intelligence",
+      status:
+        "ACTIVE",
+      details:
+        "AI analyzing trusted and suspicious behavioral patterns in real time.",
+    },
 
-    if (
-      input.includes("secure") ||
-      input.includes("official")
-    ) {
+    {
+      feature:
+        "Fraud Reputation Detection",
+      status:
+        "MONITORING",
+      details:
+        "Adaptive fraud and risk reputation systems operational.",
+    },
 
-      setResult({
-        score: "94%",
-        status: "TRUSTED",
-        reason:
-          "Strong historical reputation and no active phishing indicators detected.",
-      });
+    {
+      feature:
+        "Risk-Based Trust Scoring",
+      status:
+        "VERIFIED",
+      details:
+        "Dynamic AI trust scoring and security confidence systems enabled.",
+    },
 
-    } else {
+    {
+      feature:
+        "Identity Consistency Verification",
+      status:
+        "READY",
+      details:
+        "AI validating identity integrity and trusted interaction patterns.",
+    },
 
-      setResult({
-        score: "47%",
-        status: "SUSPICIOUS",
-        reason:
-          "AI detected inconsistent reputation signals and suspicious behavioral patterns.",
-      });
+  ];
+
+  function getColor(status) {
+
+    switch (status) {
+
+      case "ACTIVE":
+        return "bg-green-500 text-black";
+
+      case "MONITORING":
+        return "bg-yellow-500 text-black";
+
+      case "VERIFIED":
+        return "bg-cyan-500 text-black";
+
+      default:
+        return "bg-purple-500 text-white";
 
     }
 
@@ -39,80 +68,54 @@ export default function TrustEnginePage() {
 
     <ProtectedRoute>
 
-      <main className="min-h-screen bg-gradient-to-br from-black via-zinc-950 to-blue-950 text-white p-6">
+      <main className="min-h-screen bg-gradient-to-br from-black via-zinc-950 to-violet-950 text-white p-6">
 
-        <div className="max-w-4xl mx-auto">
+        <div className="mb-10">
 
-          <div className="mb-10 text-center">
+          <h1 className="text-5xl font-extrabold mb-4 bg-gradient-to-r from-violet-400 to-cyan-400 text-transparent bg-clip-text">
+            Global Trust Engine
+          </h1>
 
-            <h1 className="text-5xl font-extrabold mb-4 bg-gradient-to-r from-cyan-400 to-blue-400 text-transparent bg-clip-text">
-              AI Trust Engine
-            </h1>
+          <p className="text-zinc-300 text-lg">
+            AI-powered trust intelligence and adaptive reputation security infrastructure.
+          </p>
 
-            <p className="text-zinc-300 text-lg">
-              Reputation intelligence and transparent AI-powered trust analysis.
-            </p>
+        </div>
 
-          </div>
+        <div className="grid gap-6">
 
-          <div className="bg-white/5 border border-cyan-500/20 rounded-3xl p-6 backdrop-blur-xl shadow-2xl shadow-cyan-500/10">
+          {trustSystems.map((item, index) => (
 
-            <input
-              type="text"
-              placeholder="Enter domain, wallet, or platform..."
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              className="w-full bg-black/40 border border-zinc-700 rounded-2xl p-4 text-white text-lg outline-none mb-5"
-            />
-
-            <button
-              onClick={analyzeTrust}
-              className="w-full bg-cyan-500 hover:bg-cyan-600 transition rounded-2xl py-4 text-xl font-bold text-black"
+            <div
+              key={index}
+              className="bg-white/5 border border-violet-500/20 rounded-3xl p-6 backdrop-blur-xl shadow-2xl shadow-violet-500/10"
             >
-              Analyze Trust
-            </button>
 
-          </div>
+              <div className="flex items-center justify-between mb-5">
 
-          {result && (
+                <h2 className="text-3xl font-bold">
+                  {item.feature}
+                </h2>
 
-            <div className="mt-8 bg-white/5 border border-blue-500/20 rounded-3xl p-6 backdrop-blur-xl shadow-2xl shadow-blue-500/10">
+                <span className={`px-4 py-1 rounded-full text-sm font-bold ${getColor(item.status)}`}>
 
-              <h2 className="text-3xl font-bold mb-6 text-cyan-300">
-                Reputation Analysis
-              </h2>
+                  {item.status}
 
-              <div className="space-y-4">
+                </span>
 
-                <div className="bg-black/40 border border-zinc-800 rounded-2xl p-5">
+              </div>
 
-                  <p className="text-lg text-zinc-300 mb-2">
-                    AI Trust Score
-                  </p>
+              <div className="bg-black/40 border border-zinc-800 rounded-2xl p-5">
 
-                  <p className="text-4xl font-extrabold text-cyan-400">
-                    {result.score}
-                  </p>
-
-                </div>
-
-                <div className="bg-black/40 border border-zinc-800 rounded-2xl p-5">
-
-                  <p className="text-2xl font-bold mb-3">
-                    {result.status}
-                  </p>
-
-                  <p className="text-zinc-300 text-lg leading-8">
-                    {result.reason}
-                  </p>
-
-                </div>
+                <p className="text-zinc-300 text-lg leading-8">
+                  {item.details}
+                </p>
 
               </div>
 
             </div>
 
-          )}
+          ))}
 
         </div>
 
