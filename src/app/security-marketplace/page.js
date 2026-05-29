@@ -4,42 +4,42 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function SecurityMarketplacePage() {
 
-  const ecosystem = [
+  const marketplace = [
 
     {
       module:
-        "Developer API Gateway",
+        "Browser Security Extensions",
       status:
-        "Online",
+        "ACTIVE",
       details:
-        "Secure API infrastructure available for integrations.",
+        "AI-powered browser protection and anti-phishing security extensions.",
     },
 
     {
       module:
-        "Security Plugin Marketplace",
+        "Web3 Wallet Protection",
       status:
-        "Protected",
+        "READY",
       details:
-        "AI validating third-party security extensions.",
+        "Advanced wallet protection and blockchain security integration tools.",
     },
 
     {
       module:
-        "SDK Infrastructure",
+        "Enterprise Integrations",
       status:
-        "Active",
+        "CONNECTED",
       details:
-        "Cross-platform cybersecurity SDK systems operational.",
+        "Enterprise cybersecurity modules and organizational defense integrations.",
     },
 
     {
       module:
-        "AI Integration Engine",
+        "AI Automation Plugins",
       status:
-        "Monitoring",
+        "MONITORING",
       details:
-        "Analyzing external security module interactions.",
+        "Automated cybersecurity workflows and intelligent AI protection plugins.",
     },
 
   ];
@@ -48,17 +48,17 @@ export default function SecurityMarketplacePage() {
 
     switch (status) {
 
-      case "Online":
+      case "ACTIVE":
         return "bg-green-500 text-black";
 
-      case "Monitoring":
-        return "bg-yellow-500 text-black";
-
-      case "Protected":
+      case "READY":
         return "bg-cyan-500 text-black";
 
-      default:
+      case "CONNECTED":
         return "bg-purple-500 text-white";
+
+      default:
+        return "bg-yellow-500 text-black";
 
     }
 
@@ -68,66 +68,54 @@ export default function SecurityMarketplacePage() {
 
     <ProtectedRoute>
 
-      <main className="min-h-screen bg-black text-white p-6">
+      <main className="min-h-screen bg-gradient-to-br from-black via-zinc-950 to-orange-950 text-white p-6">
 
-        <div className="flex items-center justify-between mb-10">
+        <div className="mb-10">
 
-          <div>
+          <h1 className="text-5xl font-extrabold mb-4 bg-gradient-to-r from-orange-400 to-cyan-400 text-transparent bg-clip-text">
+            Security Marketplace
+          </h1>
 
-            <h1 className="text-5xl font-bold mb-3">
-              Security Marketplace
-            </h1>
-
-            <p className="text-zinc-400">
-              AI-powered cybersecurity developer ecosystem and marketplace infrastructure.
-            </p>
-
-          </div>
-
-          <div className="bg-cyan-500 text-black px-5 py-2 rounded-full font-bold">
-
-            ECOSYSTEM ACTIVE
-
-          </div>
+          <p className="text-zinc-300 text-lg">
+            AI-powered cybersecurity marketplace and ecosystem extension infrastructure.
+          </p>
 
         </div>
 
         <div className="grid gap-6">
 
-          {ecosystem.map(
-            (item, index) => (
+          {marketplace.map((item, index) => (
 
-              <div
-                key={index}
-                className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6"
-              >
+            <div
+              key={index}
+              className="bg-white/5 border border-orange-500/20 rounded-3xl p-6 backdrop-blur-xl shadow-2xl shadow-orange-500/10"
+            >
 
-                <div className="flex items-center justify-between mb-5">
+              <div className="flex items-center justify-between mb-5">
+
+                <div>
 
                   <h2 className="text-3xl font-bold">
                     {item.module}
                   </h2>
 
-                  <span className={`px-4 py-1 rounded-full text-sm font-bold ${getColor(item.status)}`}>
-
-                    {item.status}
-
-                  </span>
-
-                </div>
-
-                <div className="bg-black border border-zinc-800 rounded-xl p-5">
-
-                  <p className="text-zinc-300 text-lg leading-8">
+                  <p className="text-zinc-400 mt-2 text-lg">
                     {item.details}
                   </p>
 
                 </div>
 
+                <span className={`px-4 py-1 rounded-full text-sm font-bold ${getColor(item.status)}`}>
+
+                  {item.status}
+
+                </span>
+
               </div>
 
-            )
-          )}
+            </div>
+
+          ))}
 
         </div>
 
