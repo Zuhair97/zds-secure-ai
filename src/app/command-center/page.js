@@ -48,7 +48,7 @@ switch (status) {
 case "ACTIVE":
 return "bg-green-500 text-black";
 
-```
+
   case "SECURED":
     return "bg-cyan-500 text-black";
 
@@ -58,13 +58,13 @@ return "bg-green-500 text-black";
   default:
     return "bg-red-500 text-white";
 }
-```
+
 
 }
 
 return ( <ProtectedRoute> <main className="min-h-screen bg-gradient-to-br from-black via-zinc-950 to-slate-950 text-white p-6">
 
-```
+
     <div className="mb-10">
 
       <h1 className="text-5xl font-extrabold mb-4 bg-gradient-to-r from-cyan-400 to-slate-300 text-transparent bg-clip-text">
@@ -130,7 +130,6 @@ return ( <ProtectedRoute> <main className="min-h-screen bg-gradient-to-br from-b
 
   </main>
 </ProtectedRoute>
-```
 
 );
 }

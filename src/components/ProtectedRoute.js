@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function ProtectedRoute({
   children,
@@ -34,13 +35,7 @@ export default function ProtectedRoute({
   }, [router]);
 
   if (loading) {
-    return (
-      <main className="min-h-screen bg-black text-white flex items-center justify-center">
-        <h1 className="text-2xl">
-          Loading...
-        </h1>
-      </main>
-    );
+    return <LoadingSpinner />;
   }
 
   return children;
