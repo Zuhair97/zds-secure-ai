@@ -1,41 +1,67 @@
 "use client";
 
+import Link from "next/link";
 import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function SettingsPage() {
+  const settings = [
+    "Language Settings",
+    "Notification Preferences",
+    "Security Preferences",
+    "Recovery Preferences",
+    "Billing Preferences",
+    "API Access Settings",
+  ];
+
   return (
     <ProtectedRoute>
-      <main className="min-h-screen bg-black text-white p-6">
+      <main className="min-h-screen bg-gradient-to-br from-black via-zinc-950 to-slate-950 text-white p-6">
 
-        <h1 className="text-5xl font-bold text-cyan-400 mb-8">
-          Settings Center
-        </h1>
+        <div className="mb-10">
+          <h1 className="text-5xl font-extrabold bg-gradient-to-r from-cyan-400 to-emerald-400 text-transparent bg-clip-text">
+            Settings Center
+          </h1>
 
-        <div className="space-y-4">
+          <p className="text-zinc-400 mt-3">
+            Configure your ZDS Secure AI experience.
+          </p>
+        </div>
 
-          <div className="bg-zinc-900 p-4 rounded-2xl">
-            Language Settings
-          </div>
+        <div className="grid md:grid-cols-2 gap-4 mb-10">
 
-          <div className="bg-zinc-900 p-4 rounded-2xl">
-            Notification Preferences
-          </div>
+          {settings.map((item, index) => (
+            <div
+              key={index}
+              className="bg-zinc-900 p-5 rounded-2xl border border-cyan-500/20"
+            >
+              {item}
+            </div>
+          ))}
 
-          <div className="bg-zinc-900 p-4 rounded-2xl">
-            Security Preferences
-          </div>
+        </div>
 
-          <div className="bg-zinc-900 p-4 rounded-2xl">
-            Recovery Preferences
-          </div>
+        <div className="grid md:grid-cols-3 gap-4">
 
-          <div className="bg-zinc-900 p-4 rounded-2xl">
-            Billing Preferences
-          </div>
+          <Link
+            href="/profile"
+            className="bg-zinc-900 p-5 rounded-2xl border border-cyan-500/20 hover:border-cyan-400"
+          >
+            Profile
+          </Link>
 
-          <div className="bg-zinc-900 p-4 rounded-2xl">
-            API Access Settings
-          </div>
+          <Link
+            href="/notifications"
+            className="bg-zinc-900 p-5 rounded-2xl border border-cyan-500/20 hover:border-cyan-400"
+          >
+            Notifications
+          </Link>
+
+          <Link
+            href="/command-center"
+            className="bg-zinc-900 p-5 rounded-2xl border border-cyan-500/20 hover:border-cyan-400"
+          >
+            Command Center
+          </Link>
 
         </div>
 
