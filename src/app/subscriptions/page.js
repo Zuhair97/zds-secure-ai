@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 import ProtectedRoute from "@/components/ProtectedRoute";
@@ -8,6 +8,62 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 export default function SubscriptionsPage() {
 
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+
+    async function verifyPayment() {
+
+      const params =
+        new URLSearchParams(window.location.search);
+
+      const reference =
+        params.get("reference");
+
+      if (!reference) return;
+
+      try {
+
+        const response = await fetch(
+          "/api/paystack/upgrade",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              reference,
+            }),
+          }
+        );
+
+        const data =
+          await response.json();
+
+        if (data.success) {
+
+          alert(
+            "Premium Africa activated successfully."
+          );
+
+          window.history.replaceState(
+            {},
+            "",
+            "/subscriptions"
+          );
+
+        }
+
+      } catch (error) {
+
+        console.error(error);
+
+      }
+
+    }
+
+    verifyPayment();
+
+  }, []);
 
   async function upgradeToPremium() {
 
@@ -20,8 +76,11 @@ export default function SubscriptionsPage() {
       } = await supabase.auth.getUser();
 
       if (!user) {
+
         alert("Please login first.");
+
         return;
+
       }
 
       const response = await fetch(
@@ -37,22 +96,31 @@ export default function SubscriptionsPage() {
         }
       );
 
-      const data = await response.json();
+      const data =
+        await response.json();
 
       if (
         data?.data?.authorization_url
       ) {
+
         window.location.href =
           data.data.authorization_url;
+
       } else {
-        alert("Unable to start payment.");
+
+        alert(
+          "Unable to start payment."
+        );
+
       }
 
     } catch (error) {
 
       console.error(error);
 
-      alert("Payment initialization failed.");
+      alert(
+        "Payment initialization failed."
+      );
 
     } finally {
 
@@ -77,7 +145,7 @@ export default function SubscriptionsPage() {
           <div className="bg-white/5 border border-cyan-500/20 rounded-3xl p-6">
 
             <h2 className="text-3xl font-bold">
-              Premium Plan
+              Premium Africa
             </h2>
 
             <p className="text-cyan-300 text-2xl mt-3">
@@ -89,13 +157,15 @@ export default function SubscriptionsPage() {
               AI-SOC monitoring,
               wallet protection,
               fraud prevention,
-              and autonomous defense.
+              autonomous defense,
+              recovery intelligence,
+              and premium support.
             </p>
 
             <button
               onClick={upgradeToPremium}
               disabled={loading}
-              className="w-full mt-6 py-3 rounded-2xl bg-cyan-500 text-black font-bold"
+              className="w-full mt-6 py-3 rounded-2xl bg-cyan-500 text-black font-bold hover:bg-cyan-400 transition"
             >
               {loading
                 ? "Processing..."
@@ -110,7 +180,7 @@ export default function SubscriptionsPage() {
 
           <Link
             href="/profile"
-            className="bg-zinc-900 px-5 py-3 rounded-2xl border border-cyan-500/20"
+            className="bg-zinc-900 px-5 py-3 rounded-2xl border border-cyan-500/20 hover:border-cyan-400"
           >
             Back to Profile
           </Link>
@@ -123,5 +193,3 @@ export default function SubscriptionsPage() {
 
   );
 }
-
-
