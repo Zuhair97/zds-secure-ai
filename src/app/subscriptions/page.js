@@ -1,64 +1,62 @@
 "use client";
 
+import { useState } from "react";
+import { supabase } from "@/lib/supabase";
+import Link from "next/link";
 import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function SubscriptionsPage() {
 
-  const plans = [
+  const [loading, setLoading] = useState(false);
 
-    {
-      plan:
-        "Free",
-      price:
-        "$0",
-      details:
-        "Basic cybersecurity protection and alerts.",
-    },
+  async function upgradeToPremium() {
 
-    {
-      plan:
-        "Premium",
-      price:
-        "$19/mo",
-      details:
-        "Advanced AI threat intelligence and real-time defense.",
-    },
+    try {
 
-    {
-      plan:
-        "Enterprise",
-      price:
-        "Custom",
-      details:
-        "Organization-grade AI cybersecurity infrastructure.",
-    },
+      setLoading(true);
 
-    {
-      plan:
-        "Web3 Security",
-      price:
-        "$29/mo",
-      details:
-        "Advanced wallet defense and decentralized security tools.",
-    },
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
 
-  ];
+      if (!user) {
+        alert("Please login first.");
+        return;
+      }
 
-  function getColor(plan) {
+      const response = await fetch(
+        "/api/paystack/initialize",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: user.email,
+          }),
+        }
+      );
 
-    switch (plan) {
+      const data = await response.json();
 
-      case "Premium":
-        return "bg-cyan-500 text-black";
+      if (
+        data?.data?.authorization_url
+      ) {
+        window.location.href =
+          data.data.authorization_url;
+      } else {
+        alert("Unable to start payment.");
+      }
 
-      case "Enterprise":
-        return "bg-purple-500 text-white";
+    } catch (error) {
 
-      case "Web3 Security":
-        return "bg-yellow-500 text-black";
+      console.error(error);
 
-      default:
-        return "bg-green-500 text-black";
+      alert("Payment initialization failed.");
+
+    } finally {
+
+      setLoading(false);
 
     }
 
@@ -70,77 +68,60 @@ export default function SubscriptionsPage() {
 
       <main className="min-h-screen bg-gradient-to-br from-black via-zinc-950 to-emerald-950 text-white p-6">
 
-        <div className="flex items-center justify-between mb-10">
+        <h1 className="text-5xl font-extrabold mb-10 bg-gradient-to-r from-emerald-400 to-cyan-400 text-transparent bg-clip-text">
+          ZDS Secure AI Subscription Center
+        </h1>
 
-          <div>
+        <div className="grid lg:grid-cols-2 gap-6">
 
-            <h1 className="text-5xl font-extrabold mb-4 bg-gradient-to-r from-emerald-400 to-cyan-400 text-transparent bg-clip-text">
-              Subscription Ecosystem
-            </h1>
+          <div className="bg-white/5 border border-cyan-500/20 rounded-3xl p-6">
 
-            <p className="text-zinc-300 text-lg">
-              Premium AI cybersecurity monetization and subscription infrastructure.
+            <h2 className="text-3xl font-bold">
+              Premium Plan
+            </h2>
+
+            <p className="text-cyan-300 text-2xl mt-3">
+              ₦5,000 / month
             </p>
 
-          </div>
+            <p className="text-zinc-300 mt-4">
+              Advanced AI threat intelligence,
+              AI-SOC monitoring,
+              wallet protection,
+              fraud prevention,
+              and autonomous defense.
+            </p>
 
-          <div className="bg-emerald-500 text-black px-5 py-2 rounded-full font-bold shadow-lg shadow-emerald-500/40">
-
-            MONETIZATION ACTIVE
+            <button
+              onClick={upgradeToPremium}
+              disabled={loading}
+              className="w-full mt-6 py-3 rounded-2xl bg-cyan-500 text-black font-bold"
+            >
+              {loading
+                ? "Processing..."
+                : "Upgrade to Premium"}
+            </button>
 
           </div>
 
         </div>
 
-        <div className="grid gap-6">
+        <div className="mt-10">
 
-          {plans.map(
-            (item, index) => (
-
-              <div
-                key={index}
-                className="backdrop-blur-xl bg-white/5 border border-emerald-500/20 rounded-3xl p-6 shadow-2xl shadow-emerald-500/10"
-              >
-
-                <div className="flex items-center justify-between mb-5">
-
-                  <div>
-
-                    <h2 className="text-3xl font-bold">
-                      {item.plan}
-                    </h2>
-
-                    <p className="text-2xl mt-2 font-bold text-cyan-300">
-                      {item.price}
-                    </p>
-
-                  </div>
-
-                  <span className={`px-4 py-1 rounded-full text-sm font-bold ${getColor(item.plan)}`}>
-
-                    ACTIVE
-
-                  </span>
-
-                </div>
-
-                <div className="bg-black/40 border border-zinc-800 rounded-2xl p-5">
-
-                  <p className="text-zinc-300 text-lg leading-8">
-                    {item.details}
-                  </p>
-
-                </div>
-
-              </div>
-
-            )
-          )}
+          <Link
+            href="/profile"
+            className="bg-zinc-900 px-5 py-3 rounded-2xl border border-cyan-500/20"
+          >
+            Back to Profile
+          </Link>
 
         </div>
 
       </main>
 
     </ProtectedRoute>
+
   );
 }
+
+
