@@ -17,7 +17,8 @@ export async function POST(request) {
           email,
           amount: 500000, // ₦5000
           callback_url:
-            "https://zdssecure.ai/subscriptions",
+
+        "https://zds-secure-ai.vercel.app/subscriptions",",
         }),
       }
     );
