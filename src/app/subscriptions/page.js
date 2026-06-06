@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 import ProtectedRoute from "@/components/ProtectedRoute";
@@ -8,62 +8,6 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 export default function SubscriptionsPage() {
 
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-
-    async function verifyPayment() {
-
-      const params =
-        new URLSearchParams(window.location.search);
-
-      const reference =
-        params.get("reference");
-
-      if (!reference) return;
-
-      try {
-
-        const response = await fetch(
-          "/api/paystack/upgrade",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              reference,
-            }),
-          }
-        );
-
-        const data =
-          await response.json();
-
-        if (data.success) {
-
-          alert(
-            "Premium Africa activated successfully."
-          );
-
-          window.history.replaceState(
-            {},
-            "",
-            "/subscriptions"
-          );
-
-        }
-
-      } catch (error) {
-
-        console.error(error);
-
-      }
-
-    }
-
-    verifyPayment();
-
-  }, []);
 
   async function upgradeToPremium() {
 
@@ -76,11 +20,8 @@ export default function SubscriptionsPage() {
       } = await supabase.auth.getUser();
 
       if (!user) {
-
         alert("Please login first.");
-
         return;
-
       }
 
       const response = await fetch(
@@ -96,21 +37,16 @@ export default function SubscriptionsPage() {
         }
       );
 
-      const data =
-        await response.json();
+      const data = await response.json();
 
-      if (
-        data?.data?.authorization_url
-      ) {
+      if (data?.data?.authorization_url) {
 
         window.location.href =
           data.data.authorization_url;
 
       } else {
 
-        alert(
-          "Unable to start payment."
-        );
+        alert("Unable to start payment.");
 
       }
 
@@ -118,9 +54,7 @@ export default function SubscriptionsPage() {
 
       console.error(error);
 
-      alert(
-        "Payment initialization failed."
-      );
+      alert("Payment initialization failed.");
 
     } finally {
 
@@ -129,6 +63,51 @@ export default function SubscriptionsPage() {
     }
 
   }
+
+  const plans = [
+
+    {
+      plan: "Free",
+      price: "₦0",
+      description:
+        "Basic protection, alerts and account security.",
+      color: "bg-green-500 text-black",
+    },
+
+    {
+      plan: "Premium Nigeria",
+      price: "₦5,000 / month",
+      description:
+        "AI threat intelligence, fraud protection, wallet defense and autonomous monitoring.",
+      color: "bg-cyan-500 text-black",
+      premium: true,
+    },
+
+    {
+      plan: "Web3 Security",
+      price: "₦10,000 / month",
+      description:
+        "Blockchain intelligence, wallet monitoring and crypto protection.",
+      color: "bg-yellow-500 text-black",
+    },
+
+    {
+      plan: "Business",
+      price: "₦25,000 / month",
+      description:
+        "Multi-user cybersecurity infrastructure for startups and businesses.",
+      color: "bg-purple-500 text-white",
+    },
+
+    {
+      plan: "Enterprise",
+      price: "Custom Pricing",
+      description:
+        "Government, military, banking and enterprise-grade deployment.",
+      color: "bg-red-500 text-white",
+    },
+
+  ];
 
   return (
 
@@ -142,37 +121,54 @@ export default function SubscriptionsPage() {
 
         <div className="grid lg:grid-cols-2 gap-6">
 
-          <div className="bg-white/5 border border-cyan-500/20 rounded-3xl p-6">
+          {plans.map((item, index) => (
 
-            <h2 className="text-3xl font-bold">
-              Premium Africa
-            </h2>
-
-            <p className="text-cyan-300 text-2xl mt-3">
-              ₦5,000 / month
-            </p>
-
-            <p className="text-zinc-300 mt-4">
-              Advanced AI threat intelligence,
-              AI-SOC monitoring,
-              wallet protection,
-              fraud prevention,
-              autonomous defense,
-              recovery intelligence,
-              and premium support.
-            </p>
-
-            <button
-              onClick={upgradeToPremium}
-              disabled={loading}
-              className="w-full mt-6 py-3 rounded-2xl bg-cyan-500 text-black font-bold hover:bg-cyan-400 transition"
+            <div
+              key={index}
+              className="bg-white/5 border border-cyan-500/20 rounded-3xl p-6"
             >
-              {loading
-                ? "Processing..."
-                : "Upgrade to Premium"}
-            </button>
 
-          </div>
+              <div className="flex items-center justify-between mb-5">
+
+                <div>
+
+                  <h2 className="text-3xl font-bold">
+                    {item.plan}
+                  </h2>
+
+                  <p className="text-cyan-300 text-2xl mt-2 font-bold">
+                    {item.price}
+                  </p>
+
+                </div>
+
+                <span className={`px-4 py-2 rounded-full font-bold ${item.color}`}>
+                  ACTIVE
+                </span>
+
+              </div>
+
+              <p className="text-zinc-300 text-lg mb-5">
+                {item.description}
+              </p>
+
+              {item.premium && (
+
+                <button
+                  onClick={upgradeToPremium}
+                  disabled={loading}
+                  className="w-full py-3 rounded-2xl bg-cyan-500 text-black font-bold hover:bg-cyan-400"
+                >
+                  {loading
+                    ? "Processing..."
+                    : "Upgrade to Premium"}
+                </button>
+
+              )}
+
+            </div>
+
+          ))}
 
         </div>
 
@@ -180,7 +176,7 @@ export default function SubscriptionsPage() {
 
           <Link
             href="/profile"
-            className="bg-zinc-900 px-5 py-3 rounded-2xl border border-cyan-500/20 hover:border-cyan-400"
+            className="bg-zinc-900 px-5 py-3 rounded-2xl border border-cyan-500/20"
           >
             Back to Profile
           </Link>
@@ -193,3 +189,9 @@ export default function SubscriptionsPage() {
 
   );
 }
+
+
+
+
+
+
