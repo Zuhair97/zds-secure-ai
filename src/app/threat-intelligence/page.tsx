@@ -1,37 +1,35 @@
 'use client';
 import { useState, useEffect } from 'react';
+import { createClient } from '@/lib/supabase';
 
 export default function ThreatIntelligencePage() {
   const [threats, setThreats] = useState<any[]>([]);
+  const supabase = createClient();
 
-  const fetchThreats = async () => {
-    // A nan gaba za mu canza wannan da kiran API na gaske
-    console.log("Fetching new threat data...");
-    setThreats([
-      { id: '1', threat_type: 'Phishing Attempt', source: 'Global Network', created_at: new Date().toISOString() }
-    ]);
+  const fetchLiveThreats = async () => {
+    const { data, error } = await supabase
+      .from('threat_intelligence')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (!error && data) setThreats(data);
   };
 
   useEffect(() => {
-    // Kiran farko
-    fetchThreats();
-
-    // Sanya Auto-refresh kowane daƙiƙa 30 (30000ms)
-    const interval = setInterval(fetchThreats, 30000);
-
-    // Tsaftace lokacin da aka bar shafin
+    fetchLiveThreats();
+    const interval = setInterval(fetchLiveThreats, 10000); 
     return () => clearInterval(interval);
   }, []);
 
   return (
     <div className="p-8 space-y-6">
-      <h1 className="text-2xl font-bold">Live Threat Intelligence (Auto-Refresh)</h1>
+      <h1 className="text-2xl font-bold">ZDS Secure AI: Live Threat Intel</h1>
       <div className="grid gap-4">
         {threats.map((threat) => (
-          <div key={threat.id} className="p-4 border rounded-lg shadow-sm hover:bg-gray-50">
+          <div key={threat.id} className="p-4 border border-red-200 rounded-lg shadow-sm">
             <h2 className="font-semibold text-red-600">{threat.threat_type}</h2>
-            <p className="text-sm text-gray-700">Source: {threat.source}</p>
-            <p className="text-xs text-gray-500">Last Updated: {new Date(threat.created_at).toLocaleString()}</p>
+            <p className="text-sm">Severity: {threat.severity}</p>
+            <p className="text-xs text-gray-500">Detected: {new Date(threat.created_at).toLocaleString()}</p>
           </div>
         ))}
       </div>
