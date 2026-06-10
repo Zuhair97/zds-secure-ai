@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 // Canza tsohon import zuwa wannan:
-import { supabase } from '../../lib/supabase';
-import AdminRoute from '../../components/AdminRoute';
+import { supabase } from "@/lib/supabase";
+import AdminRoute from "@/components/AdminRoute";
 
 export default function AdminDashboard() {
 const [stats, setStats] = useState(null);
@@ -15,14 +15,14 @@ const { data, error } = await supabase
 .select("*")
 .maybeSingle();
 
-```
+
   if (!error) {
     setStats(data);
   }
 }
 
 loadStats();
-```
+
 
 }, []);
 
@@ -35,7 +35,7 @@ monthlyRevenue * 12;
 return ( <AdminRoute> <main className="min-h-screen bg-black text-white p-6"> <h1 className="text-5xl font-bold mb-10">
 ZDS Revenue Dashboard </h1>
 
-```
+
     <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
 
       <div className="bg-zinc-900 p-6 rounded-3xl">
@@ -79,7 +79,7 @@ ZDS Revenue Dashboard </h1>
     </div>
   </main>
 </AdminRoute>
-```
+
 
 );
 }

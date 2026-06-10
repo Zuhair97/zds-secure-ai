@@ -21,7 +21,7 @@ const links = [
 return ( <aside className="w-64 min-h-screen bg-black border-r border-zinc-800 p-4"> <h2 className="text-2xl font-bold mb-6 text-cyan-400">
 ZDS Secure AI </h2>
 
-```
+
   <nav className="space-y-3">
     {links.map((link) => (
       <Link
@@ -34,7 +34,7 @@ ZDS Secure AI </h2>
     ))}
   </nav>
 </aside>
-```
+
 
 );
 }
