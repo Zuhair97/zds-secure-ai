@@ -1,47 +1,87 @@
 import { NextResponse } from "next/server";
 
 export async function POST(request) {
-  try {
+try {
 
-    const { email } = await request.json();
 
-    const response = await fetch(
-      "https://api.paystack.co/transaction/initialize",
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+const {
   email,
-  amount: 500000,
-  callback_url:
-    "https://zds-secure-ai.vercel.app/subscriptions",
-}),
+  plan,
+} = await request.json();
 
+let amount = 500000;
 
-      }
-    );
+switch (plan) {
 
-    const data = await response.json();
+  case "Personal":
+    amount = 250000;
+    break;
 
-    return NextResponse.json(data);
+  case "Premium":
+    amount = 500000;
+    break;
 
-  } catch (error) {
+  case "Professional":
+    amount = 1000000;
+    break;
 
-    return NextResponse.json(
-      {
-        success: false,
-        message: error.message,
-      },
-      {
-        status: 500,
-      }
-    );
+  case "Web3 Security":
+    amount = 1000000;
+    break;
 
-  }
+  case "Business":
+    amount = 2500000;
+    break;
+
+  default:
+    amount = 500000;
+
 }
+
+const response = await fetch(
+  "https://api.paystack.co/transaction/initialize",
+  {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email,
+      amount,
+
+      metadata: {
+        plan,
+      },
+
+      callback_url:
+        "https://zds-secure-ai.vercel.app/subscriptions",
+    }),
+  }
+);
+
+const data = await response.json();
+
+return NextResponse.json(data);
+
+
+} catch (error) {
+
+
+return NextResponse.json(
+  {
+    success: false,
+    message: error.message,
+  },
+  {
+    status: 500,
+  }
+);
+
+
+}
+}
+
 
 
 

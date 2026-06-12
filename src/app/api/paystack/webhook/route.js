@@ -9,11 +9,14 @@ process.env.SUPABASE_SERVICE_ROLE_KEY
 
 export async function POST(request) {
 try {
+
+
 const rawBody = await request.text();
 
-```
 const signature =
-  request.headers.get("x-paystack-signature");
+  request.headers.get(
+    "x-paystack-signature"
+  );
 
 const hash = crypto
   .createHmac(
@@ -24,6 +27,7 @@ const hash = crypto
   .digest("hex");
 
 if (signature !== hash) {
+
   return NextResponse.json(
     {
       success: false,
@@ -33,11 +37,14 @@ if (signature !== hash) {
       status: 401,
     }
   );
+
 }
 
 const body = JSON.parse(rawBody);
 
-if (body.event !== "charge.success") {
+if (
+  body.event !== "charge.success"
+) {
   return NextResponse.json({
     success: true,
   });
@@ -49,9 +56,14 @@ const email =
 const reference =
   body.data.reference;
 
+const plan =
+  body.data.metadata?.plan ||
+  "Premium";
+
 const expiresAt = new Date();
+
 expiresAt.setDate(
-  expiresAt.getDate() + 30
+  expiresAt.getDate() + 365
 );
 
 const { error } =
@@ -59,21 +71,27 @@ const { error } =
     .from("profiles")
     .update({
       subscription_plan:
-        "Premium Africa",
+        plan,
+
       subscription_status:
         "active",
+
+      billing_cycle:
+        "yearly",
+
       subscription_expires_at:
         expiresAt.toISOString(),
-      billing_cycle:
-        "monthly",
+
       paystack_email:
         email,
+
       payment_reference:
         reference,
     })
     .eq("email", email);
 
 if (error) {
+
   return NextResponse.json(
     {
       success: false,
@@ -83,16 +101,17 @@ if (error) {
       status: 500,
     }
   );
+
 }
 
 return NextResponse.json({
   success: true,
 });
-```
+
 
 } catch (error) {
 
-```
+
 return NextResponse.json(
   {
     success: false,
@@ -102,7 +121,7 @@ return NextResponse.json(
     status: 500,
   }
 );
-```
+
 
 }
 }
