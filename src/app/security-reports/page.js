@@ -1,8 +1,20 @@
+
+
+
+
+
+
+
+
+
+
 "use client";
 
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 export default function SecurityReportsPage() {
   const supabase = createClient();
@@ -27,23 +39,17 @@ export default function SecurityReportsPage() {
 
     if (!data) return;
 
-    const high =
-      data.filter(
-        (x) =>
-          x.severity?.toLowerCase() === "high"
-      ).length;
+    const high = data.filter(
+      (x) => x.severity?.toLowerCase() === "high"
+    ).length;
 
-    const medium =
-      data.filter(
-        (x) =>
-          x.severity?.toLowerCase() === "medium"
-      ).length;
+    const medium = data.filter(
+      (x) => x.severity?.toLowerCase() === "medium"
+    ).length;
 
-    const low =
-      data.filter(
-        (x) =>
-          x.severity?.toLowerCase() === "low"
-      ).length;
+    const low = data.filter(
+      (x) => x.severity?.toLowerCase() === "low"
+    ).length;
 
     setStats({
       total: data.length,
@@ -54,13 +60,12 @@ export default function SecurityReportsPage() {
   }
 
   function generateReport() {
-    const riskScore =
-      Math.min(
-        100,
-        stats.high * 20 +
-          stats.medium * 10 +
-          stats.low * 5
-      );
+    const riskScore = Math.min(
+      100,
+      stats.high * 20 +
+        stats.medium * 10 +
+        stats.low * 5
+    );
 
     let riskLevel = "LOW";
 
@@ -92,6 +97,46 @@ recommended for critical assets.
       riskLevel,
       executiveSummary,
     });
+  }
+
+  async function downloadPDF() {
+    const reportElement =
+      document.getElementById(
+        "executive-report"
+      );
+
+    if (!reportElement) return;
+
+    const canvas =
+      await html2canvas(reportElement);
+
+    const imgData =
+      canvas.toDataURL("image/png");
+
+    const pdf = new jsPDF(
+      "p",
+      "mm",
+      "a4"
+    );
+
+    const width = 190;
+
+    const height =
+      (canvas.height * width) /
+      canvas.width;
+
+    pdf.addImage(
+      imgData,
+      "PNG",
+      10,
+      10,
+      width,
+      height
+    );
+
+    pdf.save(
+      `ZDS-Security-Report-${Date.now()}.pdf`
+    );
   }
 
   return (
@@ -142,46 +187,84 @@ recommended for critical assets.
         </button>
 
         {report && (
-          <div className="mt-10 bg-zinc-900 p-8 rounded-3xl">
+          <>
+            <button
+              onClick={downloadPDF}
+              className="ml-4 px-6 py-3 rounded-2xl bg-green-500 text-black font-bold"
+            >
+              Download PDF
+            </button>
 
-            <h2 className="text-3xl font-bold mb-6">
-              Executive Security Report
-            </h2>
+            <div
+              id="executive-report"
+              className="mt-10 bg-zinc-900 p-8 rounded-3xl"
+            >
 
-            <div className="mb-6">
-              <p className="text-xl">
-                Risk Score:
-              </p>
+              <div className="mb-8">
+                <h1 className="text-4xl font-bold text-cyan-400">
+                  ZDS Secure AI
+                </h1>
 
-              <p className="text-6xl font-bold text-cyan-400">
-                {report.riskScore}/100
-              </p>
+                <p className="text-zinc-400">
+                  Executive Cybersecurity Report
+                </p>
+
+                <p className="text-zinc-500 text-sm">
+                  Generated:{" "}
+                  {new Date().toLocaleString()}
+                </p>
+              </div>
+
+              <h2 className="text-3xl font-bold mb-6">
+                Executive Security Report
+              </h2>
+
+              <div className="mb-6">
+                <p className="text-xl">
+                  Risk Score:
+                </p>
+
+                <p className="text-6xl font-bold text-cyan-400">
+                  {report.riskScore}/100
+                </p>
+              </div>
+
+              <div className="mb-6">
+                <p className="text-xl">
+                  Risk Level:
+                </p>
+
+                <p className="text-4xl font-bold">
+                  {report.riskLevel}
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-2xl font-bold mb-4">
+                  Executive Summary
+                </h3>
+
+                <pre className="whitespace-pre-wrap text-zinc-300">
+                  {report.executiveSummary}
+                </pre>
+              </div>
+
             </div>
-
-            <div className="mb-6">
-              <p className="text-xl">
-                Risk Level:
-              </p>
-
-              <p className="text-4xl font-bold">
-                {report.riskLevel}
-              </p>
-            </div>
-
-            <div>
-              <h3 className="text-2xl font-bold mb-4">
-                Executive Summary
-              </h3>
-
-              <pre className="whitespace-pre-wrap text-zinc-300">
-                {report.executiveSummary}
-              </pre>
-            </div>
-
-          </div>
+          </>
         )}
 
       </main>
     </ProtectedRoute>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
