@@ -1,117 +1,230 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import { createClient } from "@/lib/supabase";
 
 export default function AISOCPage() {
 
-  const operations = [
+const supabase = createClient();
 
-    {
-      operation:
-        "Threat Correlation Engine",
-      status:
-        "ACTIVE",
-      details:
-        "AI correlating cyber threats and suspicious activity across systems.",
-    },
+const [threats, setThreats] = useState([]);
+const [loading, setLoading] = useState(true);
 
-    {
-      operation:
-        "Autonomous Incident Response",
-      status:
-        "READY",
-      details:
-        "Automated AI-driven security response and recovery coordination workflows.",
-    },
+async function loadThreats() {
 
-    {
-      operation:
-        "Continuous Monitoring",
-      status:
-        "MONITORING",
-      details:
-        "24/7 intelligent monitoring and real-time cybersecurity analysis infrastructure.",
-    },
 
-    {
-      operation:
-        "Risk Escalation Intelligence",
-      status:
-        "VERIFIED",
-      details:
-        "AI prioritizing elevated incidents and coordinating emergency response actions.",
-    },
+const { data } = await supabase
+  .from("threat_intelligence")
+  .select("*")
+  .eq("is_active", true)
+  .order("created_at", { ascending: false });
 
-  ];
+if (data) {
+  setThreats(data);
+}
 
-  function getColor(status) {
+setLoading(false);
 
-    switch (status) {
 
-      case "ACTIVE":
-        return "bg-green-500 text-black";
+}
 
-      case "READY":
-        return "bg-cyan-500 text-black";
+useEffect(() => {
 
-      case "MONITORING":
-        return "bg-yellow-500 text-black";
 
-      default:
-        return "bg-purple-500 text-white";
+loadThreats();
 
-    }
+const interval = setInterval(
+  loadThreats,
+  10000
+);
 
-  }
+return () => clearInterval(interval);
 
-  return (
 
-    <ProtectedRoute>
+}, []);
 
-      <main className="min-h-screen bg-gradient-to-br from-black via-zinc-950 to-rose-950 text-white p-6">
+const high =
+threats.filter(
+(x) =>
+x.severity?.toLowerCase() === "high"
+).length;
 
-        <div className="mb-10">
+const medium =
+threats.filter(
+(x) =>
+x.severity?.toLowerCase() === "medium"
+).length;
 
-          <h1 className="text-5xl font-extrabold mb-4 bg-gradient-to-r from-rose-400 to-cyan-400 text-transparent bg-clip-text">
-            AI Security Operations Center
-          </h1>
+const low =
+threats.filter(
+(x) =>
+x.severity?.toLowerCase() === "low"
+).length;
 
-          <p className="text-zinc-300 text-lg">
-            Autonomous AI cybersecurity monitoring and intelligent incident response infrastructure.
-          </p>
+const riskScore =
+Math.min(
+100,
+high * 20 +
+medium * 10 +
+low * 5
+);
 
-        </div>
+let riskLevel = "LOW";
 
-        <div className="grid gap-6">
+if (riskScore >= 70) {
+riskLevel = "HIGH";
+} else if (riskScore >= 40) {
+riskLevel = "MEDIUM";
+}
 
-          {operations.map((item, index) => (
+function recommendation() {
+
+
+if (riskLevel === "HIGH") {
+  return "Immediate incident response recommended. Critical monitoring required.";
+}
+
+if (riskLevel === "MEDIUM") {
+  return "Enhanced monitoring recommended. Review suspicious activity.";
+}
+
+return "Security posture stable. Continue routine monitoring.";
+
+
+}
+
+function severityColor(level) {
+
+
+switch (
+  level?.toLowerCase()
+) {
+
+  case "high":
+    return "bg-red-500 text-white";
+
+  case "medium":
+    return "bg-yellow-500 text-black";
+
+  default:
+    return "bg-green-500 text-black";
+}
+
+
+}
+
+return (
+
+
+<ProtectedRoute>
+
+  <main className="min-h-screen bg-gradient-to-br from-black via-zinc-950 to-rose-950 text-white p-6">
+
+    <h1 className="text-5xl font-extrabold mb-10 bg-gradient-to-r from-rose-400 to-cyan-400 text-transparent bg-clip-text">
+      AI Security Operations Center V2
+    </h1>
+
+    <div className="grid md:grid-cols-4 gap-6 mb-10">
+
+      <div className="bg-zinc-900 p-6 rounded-3xl">
+        <h2>Total Threats</h2>
+        <p className="text-5xl font-bold">
+          {threats.length}
+        </p>
+      </div>
+
+      <div className="bg-red-950 p-6 rounded-3xl">
+        <h2>High Risk</h2>
+        <p className="text-5xl font-bold">
+          {high}
+        </p>
+      </div>
+
+      <div className="bg-yellow-900 p-6 rounded-3xl">
+        <h2>Medium Risk</h2>
+        <p className="text-5xl font-bold">
+          {medium}
+        </p>
+      </div>
+
+      <div className="bg-green-900 p-6 rounded-3xl">
+        <h2>Low Risk</h2>
+        <p className="text-5xl font-bold">
+          {low}
+        </p>
+      </div>
+
+    </div>
+
+    <div className="bg-zinc-900 p-8 rounded-3xl mb-10">
+
+      <h2 className="text-3xl font-bold mb-4">
+        AI Risk Assessment
+      </h2>
+
+      <p className="text-6xl font-bold text-cyan-400">
+        {riskScore}/100
+      </p>
+
+      <p className="text-2xl font-bold mt-3">
+        Risk Level: {riskLevel}
+      </p>
+
+      <p className="text-zinc-300 mt-4">
+        {recommendation()}
+      </p>
+
+    </div>
+
+    <div className="bg-zinc-900 p-8 rounded-3xl">
+
+      <h2 className="text-3xl font-bold mb-8">
+        Live Threat Feed
+      </h2>
+
+      {loading ? (
+
+        <p>Loading...</p>
+
+      ) : (
+
+        <div className="grid gap-5">
+
+          {threats.map((threat) => (
 
             <div
-              key={index}
-              className="bg-white/5 border border-rose-500/20 rounded-3xl p-6 backdrop-blur-xl shadow-2xl shadow-rose-500/10"
+              key={threat.id}
+              className="bg-black border border-zinc-800 rounded-2xl p-5"
             >
 
-              <div className="flex items-center justify-between mb-5">
+              <div className="flex items-center justify-between mb-4">
 
-                <div>
+                <h3 className="text-2xl font-bold">
+                  {threat.threat_type}
+                </h3>
 
-                  <h2 className="text-3xl font-bold">
-                    {item.operation}
-                  </h2>
-
-                  <p className="text-zinc-400 mt-2 text-lg">
-                    {item.details}
-                  </p>
-
-                </div>
-
-                <span className={`px-4 py-1 rounded-full text-sm font-bold ${getColor(item.status)}`}>
-
-                  {item.status}
-
+                <span
+                  className={`px-4 py-1 rounded-full font-bold ${severityColor(threat.severity)}`}
+                >
+                  {threat.severity}
                 </span>
 
               </div>
+
+              <p className="text-zinc-300 mb-2">
+                {threat.description}
+              </p>
+
+              <p className="text-zinc-500 text-sm">
+                Source: {threat.source}
+              </p>
+
+              <p className="text-zinc-500 text-sm">
+                {new Date(
+                  threat.created_at
+                ).toLocaleString()}
+              </p>
 
             </div>
 
@@ -119,8 +232,25 @@ export default function AISOCPage() {
 
         </div>
 
-      </main>
+      )}
 
-    </ProtectedRoute>
-  );
+    </div>
+
+  </main>
+
+</ProtectedRoute>
+
+
+);
+
 }
+
+
+
+
+
+
+
+
+
+
