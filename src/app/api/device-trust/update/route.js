@@ -22,56 +22,47 @@ export async function POST() {
 
     for (const device of devices) {
 
-      let score = 100;
+      let riskLevel = "LOW";
 
-      if (device.trusted === false)
-        score -= 30;
+      const now = new Date();
+      const lastSeen = device.last_seen
+        ? new Date(device.last_seen)
+        : null;
 
-      if (
-        device.risk_level?.toLowerCase() === "high"
-      )
-        score -= 40;
+      let daysOffline = 0;
 
-      if (
-        device.risk_level?.toLowerCase() === "medium"
-      )
-        score -= 20;
-
-      if (
-        device.status?.toLowerCase() !== "active"
-      )
-        score -= 10;
-
-      if (score < 0)
-        score = 0;
-
-      let level = "TRUSTED";
-      let recommendation =
-        "Device appears trusted.";
-
-      if (score < 80) {
-        level = "SUSPICIOUS";
-        recommendation =
-          "Review device activity.";
+      if (lastSeen) {
+        daysOffline =
+          Math.floor(
+            (now - lastSeen) /
+            (1000 * 60 * 60 * 24)
+          );
       }
 
-      if (score < 50) {
-        level = "ROGUE";
-        recommendation =
-          "Investigate and isolate device.";
+      if (
+        device.trusted === false
+      ) {
+        riskLevel = "MEDIUM";
+      }
+
+      if (
+        daysOffline > 30
+      ) {
+        riskLevel = "HIGH";
+      }
+
+      if (
+        device.status?.toLowerCase() === "compromised"
+      ) {
+        riskLevel = "HIGH";
       }
 
       await supabase
-        .from("device_trust")
-        .upsert({
-          user_id: device.user_id,
-          device_id: device.id,
-          trust_score: score,
-          trust_level: level,
-          recommendation,
-          updated_at:
-            new Date().toISOString(),
-        });
+        .from("devices")
+        .update({
+          risk_level: riskLevel
+        })
+        .eq("id", device.id);
 
     }
 
