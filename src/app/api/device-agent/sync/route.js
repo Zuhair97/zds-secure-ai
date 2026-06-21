@@ -1,22 +1,24 @@
 import { NextResponse } from "next/server";
 
-export async function POST(req) {
-  try {
-    const body = await req.json();
+import { NextResponse } from "next/server";
 
-    console.log("Device Agent Sync:", body);
+export async function POST(request) {
+  try {
+    const data = await request.json();
+
+    console.log("Device Agent Sync:", data);
 
     return NextResponse.json({
       success: true,
-      received: body,
-      timestamp: Date.now()
+      message: "Telemetry received",
+      device: data.device_id || "unknown"
     });
 
-  } catch (err) {
+  } catch (error) {
     return NextResponse.json(
       {
         success: false,
-        error: err.message
+        error: error.message
       },
       { status: 500 }
     );
