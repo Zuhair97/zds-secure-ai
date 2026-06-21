@@ -1,7 +1,5 @@
 import { NextResponse } from "next/server";
 
-import { NextResponse } from "next/server";
-
 export async function POST(request) {
   try {
     const data = await request.json();
@@ -11,14 +9,13 @@ export async function POST(request) {
     return NextResponse.json({
       success: true,
       message: "Telemetry received",
-      device: data.device_id || "unknown"
+      device: data.device_id || "unknown",
     });
-
   } catch (error) {
     return NextResponse.json(
       {
         success: false,
-        error: error.message
+        error: error.message,
       },
       { status: 500 }
     );
