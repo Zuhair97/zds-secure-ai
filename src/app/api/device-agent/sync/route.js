@@ -4,7 +4,7 @@ export async function POST(request) {
 try {
 const data = await request.json();
 
-```
+
 console.log("Device Agent Sync:", data);
 
 return NextResponse.json({
@@ -12,7 +12,7 @@ return NextResponse.json({
   message: "Telemetry received",
   device: data.device_id,
 });
-```
+
 
 } catch (error) {
 return NextResponse.json(
