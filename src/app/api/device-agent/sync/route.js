@@ -5,8 +5,53 @@ export async function POST(request) {
   try {
     const data = await request.json();
 
+    const { data: existingDevice } = await supabaseAdmin
+      .from("devices")
+      .select("*")
+      .eq("device_id", data.device_id)
+      .maybeSingle();
+
+    let trustScore = 100;
+    let riskLevel = "low";
+    let riskReason = "Normal device activity";
+
+    if (existingDevice) {
+
+      if (
+        existingDevice.fingerprint &&
+        data.fingerprint &&
+        existingDevice.fingerprint !== data.fingerprint
+      ) {
+        trustScore = 40;
+        riskLevel = "critical";
+        riskReason = "Device fingerprint changed";
+      }
+
+      else if (
+        existingDevice.hostname &&
+        data.hostname &&
+        existingDevice.hostname !== data.hostname
+      ) {
+        trustScore = 70;
+        riskLevel = "medium";
+        riskReason = "Hostname changed";
+      }
+
+      else if (
+        existingDevice.operating_system &&
+        data.operating_system &&
+        existingDevice.operating_system !== data.operating_system
+      ) {
+        trustScore = 60;
+        riskLevel = "high";
+        riskReason = "Operating system changed";
+      }
+    }
+
     const payload = {
       device_id: data.device_id,
+      fingerprint: data.fingerprint || null,
+
       hostname: data.hostname || null,
 
       operating_system: data.operating_system || null,
@@ -28,20 +73,13 @@ export async function POST(request) {
       battery_status: data.battery_status || null,
       battery_temperature: data.battery_temperature || null,
 
-      fingerprint: data.fingerprint || null,
+      trust_score: trustScore,
+      risk_level: riskLevel,
+      risk_reason: riskReason,
 
-      trust_score: 100,
-      risk_level: "low",
       status: "online",
-
       last_seen: new Date().toISOString()
     };
-
-    const { data: existingDevice } = await supabaseAdmin
-      .from("devices")
-      .select("id")
-      .eq("device_id", data.device_id)
-      .maybeSingle();
 
     let result;
 
@@ -64,8 +102,9 @@ export async function POST(request) {
       success: true,
       message: "Device synced successfully",
       device: data.device_id,
-      trust_score: 100,
-      risk_level: "low",
+      trust_score: trustScore,
+      risk_level: riskLevel,
+      risk_reason: riskReason,
       status: "online"
     });
 
@@ -81,6 +120,3 @@ export async function POST(request) {
     );
   }
 }
-
-
-
