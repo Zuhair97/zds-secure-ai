@@ -5,97 +5,82 @@ export async function POST(request) {
   try {
     const data = await request.json();
 
-    const { data: existingDevice } = await supabaseAdmin
-      .from("devices")
-      .select("*")
-      .eq("device_id", data.device_id)
-      .maybeSingle();
+    // ========= Fingerprint Tamper Detection =========
 
     let trustScore = 100;
     let riskLevel = "low";
     let riskReason = "Normal device activity";
 
-    if (existingDevice) {
+    const { data: existing } = await supabaseAdmin
+      .from("devices")
+      .select("*")
+      .eq("device_id", data.device_id)
+      .single();
 
-      if (
-        existingDevice.fingerprint &&
-        data.fingerprint &&
-        existingDevice.fingerprint !== data.fingerprint
-      ) {
-        trustScore = 40;
-        riskLevel = "critical";
-        riskReason = "Device fingerprint changed";
-      }
-
-      else if (
-        existingDevice.hostname &&
-        data.hostname &&
-        existingDevice.hostname !== data.hostname
-      ) {
-        trustScore = 70;
-        riskLevel = "medium";
-        riskReason = "Hostname changed";
-      }
-
-      else if (
-        existingDevice.operating_system &&
-        data.operating_system &&
-        existingDevice.operating_system !== data.operating_system
-      ) {
-        trustScore = 60;
-        riskLevel = "high";
-        riskReason = "Operating system changed";
-      }
+    if (
+      existing &&
+      existing.fingerprint &&
+      existing.fingerprint !== data.fingerprint
+    ) {
+      trustScore = 40;
+      riskLevel = "critical";
+      riskReason = "Device fingerprint changed";
     }
 
-    const payload = {
+    // ========= Device Registry =========
+
+    const devicePayload = {
       device_id: data.device_id,
-      fingerprint: data.fingerprint || null,
-
-      hostname: data.hostname || null,
-
-      operating_system: data.operating_system || null,
-      os_version: data.os_version || null,
-
-      ip_address: data.ip_address || null,
-
-      latitude: data.latitude || null,
-      longitude: data.longitude || null,
-
-      provider: data.provider || null,
-      accuracy: data.accuracy || null,
-
-      cpu_percent: data.cpu_percent || null,
-      memory_percent: data.memory_percent || null,
-      disk_percent: data.disk_percent || null,
-
-      battery_level: data.battery_level || null,
-      battery_status: data.battery_status || null,
-      battery_temperature: data.battery_temperature || null,
-
+      hostname: data.hostname,
+      operating_system: data.operating_system,
+      os_version: data.os_version,
+      ip_address: data.ip_address,
+      cpu_percent: data.cpu_percent,
+      memory_percent: data.memory_percent,
+      disk_percent: data.disk_percent,
+      battery_level: data.battery_level,
+      battery_status: data.battery_status,
+      battery_temperature: data.battery_temperature,
+      provider: data.provider,
+      accuracy: data.accuracy,
+      latitude: data.latitude,
+      longitude: data.longitude,
+      fingerprint: data.fingerprint,
       trust_score: trustScore,
       risk_level: riskLevel,
       risk_reason: riskReason,
-
       status: "online",
-      last_seen: new Date().toISOString()
+      last_seen: new Date().toISOString(),
     };
 
-    let result;
-
-    if (existingDevice) {
-      result = await supabaseAdmin
+    if (existing) {
+      await supabaseAdmin
         .from("devices")
-        .update(payload)
+        .update(devicePayload)
         .eq("device_id", data.device_id);
     } else {
-      result = await supabaseAdmin
+      await supabaseAdmin
         .from("devices")
-        .insert(payload);
+        .insert(devicePayload);
     }
 
-    if (result.error) {
-      throw result.error;
+    // ========= Location History =========
+
+    if (
+      data.latitude !== null &&
+      data.latitude !== undefined &&
+      data.longitude !== null &&
+      data.longitude !== undefined
+    ) {
+      await supabaseAdmin
+        .from("device_locations")
+        .insert({
+          device_id: data.device_id,
+          latitude: data.latitude,
+          longitude: data.longitude,
+          accuracy: data.accuracy,
+          provider: data.provider,
+        });
     }
 
     return NextResponse.json({
@@ -105,18 +90,21 @@ export async function POST(request) {
       trust_score: trustScore,
       risk_level: riskLevel,
       risk_reason: riskReason,
-      status: "online"
+      status: "online",
     });
 
   } catch (error) {
     return NextResponse.json(
       {
         success: false,
-        error: error.message
+        error: error.message,
       },
       {
-        status: 500
+        status: 500,
       }
     );
   }
 }
+
+
+
