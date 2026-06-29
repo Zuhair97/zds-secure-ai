@@ -31,6 +31,7 @@ export async function POST(request) {
 
     const devicePayload = {
       device_id: data.device_id,
+      user_id: data.user_id,
       hostname: data.hostname,
       operating_system: data.operating_system,
       os_version: data.os_version,
