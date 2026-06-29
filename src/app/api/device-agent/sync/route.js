@@ -4,7 +4,7 @@ import { supabaseAdmin } from "@/lib/supabase-admin";
 export async function POST(request) {
   try {
     const data = await request.json();
-
+    console.log("SYNC DATA:", data);
     // ========= Fingerprint Tamper Detection =========
 
     let trustScore = 100;
