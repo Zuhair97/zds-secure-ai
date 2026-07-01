@@ -6,6 +6,17 @@ export async function POST(request) {
   try {
 
     const data = await request.json();
+console.log("Incoming user_id:", data.user_id);
+
+const { data: checkUser, error: checkError } =
+  await supabaseAdmin
+    .from("users")
+    .select("id,email")
+    .eq("id", data.user_id)
+    .maybeSingle();
+
+console.log("User lookup:", checkUser);
+console.log("Lookup error:", checkError);
     console.log("SYNC PAYLOAD:", data);
     if (!data.device_id) {
       return NextResponse.json(
