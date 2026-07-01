@@ -6,7 +6,7 @@ export async function POST(request) {
   try {
 
     const data = await request.json();
-    xconsole.log("SYNC PAYLOAD:", data);
+    console.log("SYNC PAYLOAD:", data);
     if (!data.device_id) {
       return NextResponse.json(
         {
