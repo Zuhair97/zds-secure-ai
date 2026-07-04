@@ -1,77 +1,73 @@
+javascript
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase-auth";
 import LoadingScreen from "@/components/auth/LoadingScreen";
 
 export default function LoginPage() {
-
   const router = useRouter();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  async function handleGoogleLogin() {
+  async function handleLogin(e) {
+    e.preventDefault();
 
-  const { error } = await supabase.auth.signInWithOAuth({
-    provider: "google",
-    options: {
-      redirectTo: `${window.location.origin}/dashboard`
+    setLoading(true);
+
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      setLoading(false);
+      alert(error.message);
+      return;
     }
-  });
 
-  if (error) {
-    alert(error.message);
+    router.push("/dashboard");
   }
 
-}
+  async function handleGoogleLogin() {
+    setLoading(true);
 
-async function handleLogin(e) {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/dashboard`,
+      },
+    });
 
-  e.preventDefault();
-
-  setLoading(true);
-
-  const { error } = await supabase.auth.signInWithPassword({
-    email,
-    password
-  });
-
-  setLoading(false);
-
-  if (error) {
-    alert(error.message);
-    return;
+    if (error) {
+      setLoading(false);
+      alert(error.message);
+    }
   }
-
-  router.push("/dashboard");
-
-}
-
-
-
-
-
 
   if (loading) {
-
-    return <LoadingScreen />;
-
+    return (
+      <LoadingScreen
+        title="ZDS Secure AI"
+        subtitle="Authenticating..."
+      />
+    );
   }
 
   return (
+    <main className="min-h-screen bg-black flex items-center justify-center px-4">
 
-    <main className="min-h-screen flex items-center justify-center bg-black text-white">
+      <div className="w-full max-w-md rounded-3xl bg-zinc-900 shadow-2xl p-8">
 
-      <div className="w-full max-w-md bg-zinc-900 rounded-2xl shadow-2xl p-8">
-
-        <h1 className="text-3xl font-bold text-center mb-2">
+        <h1 className="text-3xl font-bold text-center text-white">
           ZDS Secure AI
         </h1>
 
-        <p className="text-center text-gray-400 mb-8">
+        <p className="text-center text-gray-400 mt-2 mb-8">
           Secure Login
         </p>
 
@@ -83,49 +79,58 @@ async function handleLogin(e) {
           <input
             type="email"
             placeholder="Email Address"
+            className="w-full rounded-xl bg-zinc-800 p-4 text-white outline-none"
             value={email}
-            onChange={(e)=>setEmail(e.target.value)}
-            className="w-full rounded-xl bg-zinc-800 p-3 outline-none"
+            onChange={(e) => setEmail(e.target.value)}
+            required
           />
 
           <input
             type="password"
             placeholder="Password"
+            className="w-full rounded-xl bg-zinc-800 p-4 text-white outline-none"
             value={password}
-            onChange={(e)=>setPassword(e.target.value)}
-            className="w-full rounded-xl bg-zinc-800 p-3 outline-none"
+            onChange={(e) => setPassword(e.target.value)}
+            required
           />
 
           <button
             type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 rounded-xl p-3 font-bold"
+            className="w-full rounded-xl bg-blue-600 hover:bg-blue-700 p-4 font-bold text-white transition"
           >
             Login
           </button>
-<button
-  type="button"
-  onClick={handleGoogleLogin}
-  className="w-full mt-4 rounded-xl bg-white text-black font-bold p-3 hover:bg-gray-200 transition"
->
-  Continue with Google
-</button>
+
         </form>
 
-        <div className="mt-6 text-center">
+        <button
+          onClick={handleGoogleLogin}
+          className="w-full mt-4 rounded-xl bg-white hover:bg-gray-200 p-4 font-bold text-black transition"
+        >
+          Continue with Google
+        </button>
 
-          <a
+        <div className="mt-8 flex justify-between text-sm">
+
+          <Link
+            href="/signup"
+            className="text-blue-400 hover:underline"
+          >
+            Create Account
+          </Link>
+
+          <Link
             href="/forgot-password"
-            className="text-blue-400"
+            className="text-blue-400 hover:underline"
           >
             Forgot Password?
-          </a>
+          </Link>
 
         </div>
 
       </div>
 
     </main>
-
   );
-
 }
+

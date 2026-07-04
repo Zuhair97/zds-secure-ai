@@ -1,4 +1,7 @@
+javascript
 "use client";
+
+import AuthGuard from "@/components/auth/AuthGuard";
 
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
@@ -8,27 +11,29 @@ import DashboardSecurityHealth from "@/components/dashboard/DashboardSecurityHea
 
 export default function DashboardPage() {
   return (
-    <div className="flex min-h-screen bg-slate-100">
+    <AuthGuard>
+      <div className="flex min-h-screen bg-slate-100">
 
-      <DashboardSidebar />
+        <DashboardSidebar />
 
-      <main className="flex-1 flex flex-col">
+        <main className="flex-1 flex flex-col">
 
-        <DashboardHeader />
+          <DashboardHeader />
 
-        <div className="p-8 space-y-8">
+          <div className="p-8 space-y-8">
 
-          <DashboardStats />
+            <DashboardStats />
 
-          <DashboardSecurityHealth />
+            <DashboardSecurityHealth />
 
-          <DashboardDeviceGrid />
+            <DashboardDeviceGrid />
 
-        </div>
+          </div>
 
-      </main>
+        </main>
 
-    </div>
+      </div>
+    </AuthGuard>
   );
 }
 
