@@ -13,8 +13,42 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  async function handleLogin(e) {
   async function handleGoogleLogin() {
+
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo: `${window.location.origin}/dashboard`
+    }
+  });
+
+  if (error) {
+    alert(error.message);
+  }
+
+}
+
+async function handleLogin(e) {
+
+  e.preventDefault();
+
+  setLoading(true);
+
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  setLoading(false);
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  router.push("/dashboard");
+
+}
 
   const { error } = await supabase.auth.signInWithOAuth({
 
