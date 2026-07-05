@@ -1,29 +1,31 @@
 "use client";
 
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { AuthContext } from "@/components/AuthProvider";
+import { useAuth } from "@/components/auth/AuthProvider";
 
 export default function HomePage() {
-  const { session, loading } =
-    useContext(AuthContext);
+
+  const { user, loading } = useAuth();
 
   const router = useRouter();
 
   useEffect(() => {
-    if (!loading) {
-      if (!session) {
-        router.push("/auth");
-      } else {
-        router.push("/assets");
-      }
+
+    if (loading) return;
+
+    if (user) {
+      router.replace("/dashboard");
+    } else {
+      router.replace("/login");
     }
-  }, [session, loading, router]);
+
+  }, [user, loading, router]);
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-black text-white">
       <h1 className="text-2xl font-bold">
-        Loading Sentinel AI...
+        ZDS Secure AI...
       </h1>
     </main>
   );
