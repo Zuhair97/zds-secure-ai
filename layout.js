@@ -1,4 +1,4 @@
-javascript
+
 import "./globals.css";
 import { AuthProvider } from "@/components/auth/AuthProvider";
 
