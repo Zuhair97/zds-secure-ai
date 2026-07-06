@@ -2,8 +2,14 @@ import "./globals.css";
 import { AuthProvider } from "@/components/auth/AuthProvider";
 
 export const metadata = {
-  title: "Sentinel AI",
-  description: "AI-powered cybersecurity platform",
+  title: "ZDS Secure AI",
+  description: "Next Generation AI Cybersecurity Platform",
+
+  icons: {
+    icon: "/zds.png",
+    shortcut: "/zds.png",
+    apple: "/zds.png",
+  },
 };
 
 export default function RootLayout({

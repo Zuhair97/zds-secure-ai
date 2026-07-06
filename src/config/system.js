@@ -1,6 +1,6 @@
 export const SYSTEM_CONFIG = {
 
-  appName: "Sentinel AI",
+  appName: "ZDS Secure AI",
 
   version: "1.0.0",
 

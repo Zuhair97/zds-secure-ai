@@ -1,5 +1,5 @@
 "use client";
-
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -65,13 +65,22 @@ export default function DashboardSidebar() {
 
       <div className="p-6 border-b border-slate-800">
 
-        <h1 className="text-2xl font-bold text-blue-500">
-          ZDS Secure AI
-        </h1>
+        <div className="flex justify-center mb-4">
+  <Image
+    src="/zds.png"
+    alt="ZDS Secure AI"
+    width={80}
+    height={80}
+  />
+</div>
 
-        <p className="text-slate-400 text-sm mt-2">
-          Intelligent Cyber Defense Platform
-        </p>
+<h1 className="text-xl font-bold text-center text-blue-400">
+  ZDS Secure AI
+</h1>
+
+<p className="text-slate-400 text-xs text-center mt-2">
+  AI Cyber Defense Platform
+</p>
 
       </div>
 

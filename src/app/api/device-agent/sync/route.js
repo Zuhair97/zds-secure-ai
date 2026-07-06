@@ -247,7 +247,7 @@ console.log("Lookup error:", checkError);
         severity: riskLevel,
 
         description:
-          "Device synchronized with Sentinel AI.",
+          "Device synchronized with ZDS Secure AI.",
 
         metadata: {
 

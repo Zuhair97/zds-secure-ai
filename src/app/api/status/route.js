@@ -1,6 +1,6 @@
 export async function GET() {
   return Response.json({
-    platform: "Sentinel AI",
+    platform: "ZDS Secure AI",
     status: "ACTIVE",
     threatLevel: "LOW",
     monitoredAssets: 248,
