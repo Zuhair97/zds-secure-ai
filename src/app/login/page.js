@@ -20,11 +20,10 @@ export default function LoginPage() {
 
     setLoading(true);
 
-    const { error } =
-      await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
 
     if (error) {
       setLoading(false);
@@ -38,14 +37,12 @@ export default function LoginPage() {
   async function handleGoogleLogin() {
     setLoading(true);
 
-    const { error } =
-      await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo:
-            `${window.location.origin}/dashboard`,
-        },
-      });
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/dashboard`,
+      },
+    });
 
     if (error) {
       setLoading(false);
@@ -54,7 +51,12 @@ export default function LoginPage() {
   }
 
   if (loading) {
-    return <LoadingScreen />;
+    return (
+      <LoadingScreen
+        title="ZDS Secure AI"
+        subtitle="Authenticating..."
+      />
+    );
   }
 
   return (
@@ -63,34 +65,22 @@ export default function LoginPage() {
       <div className="w-full max-w-md rounded-3xl bg-zinc-900 shadow-2xl p-8">
 
         <div className="flex justify-center mb-6">
-
           <Image
-            src="/logo.png"
+            src="/zds.png"
             alt="ZDS Secure AI"
-            width={140}
-            height={140}
+            width={150}
+            height={150}
             priority
           />
-
         </div>
 
-        <div className="flex justify-center mb-6">
-  <Image
-    src="/zds.png"
-    alt="ZDS Secure AI"
-    width={150}
-    height={150}
-    priority
-  />
-</div>
+        <h1 className="text-3xl font-bold text-center text-white">
+          ZDS Secure AI
+        </h1>
 
-<h1 className="text-3xl font-bold text-center text-white">
-  ZDS Secure AI
-</h1>
-
-<p className="text-center text-gray-400 mt-2 mb-8">
-  Next Generation AI Cybersecurity Platform
-</p>
+        <p className="text-center text-gray-400 mt-2 mb-8">
+          Next Generation AI Cybersecurity Platform
+        </p>
 
         <form
           onSubmit={handleLogin}
@@ -100,23 +90,24 @@ export default function LoginPage() {
           <input
             type="email"
             placeholder="Email Address"
-            className="w-full rounded-xl bg-zinc-800 p-4 text-white"
+            className="w-full rounded-xl bg-zinc-800 p-4 text-white outline-none"
             value={email}
-            onChange={(e)=>setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
 
           <input
             type="password"
             placeholder="Password"
-            className="w-full rounded-xl bg-zinc-800 p-4 text-white"
+            className="w-full rounded-xl bg-zinc-800 p-4 text-white outline-none"
             value={password}
-            onChange={(e)=>setPassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
             required
           />
 
           <button
-            className="w-full rounded-xl bg-blue-600 hover:bg-blue-700 p-4 font-bold text-white"
+            type="submit"
+            className="w-full rounded-xl bg-blue-600 hover:bg-blue-700 p-4 font-bold text-white transition"
           >
             Login
           </button>
@@ -125,14 +116,34 @@ export default function LoginPage() {
 
         <button
           onClick={handleGoogleLogin}
-          className="w-full mt-4 rounded-xl bg-white p-4 font-bold text-black"
+          className="w-full mt-4 rounded-xl bg-white hover:bg-gray-200 p-4 font-bold text-black transition"
         >
           Continue with Google
         </button>
+
+        <div className="mt-6 flex flex-col gap-3 text-center text-sm">
+
+          <Link
+            href="/signup"
+            className="text-blue-400 hover:underline"
+          >
+            Create Account
+          </Link>
+
+          <Link
+            href="/forgot-password"
+            className="text-blue-400 hover:underline"
+          >
+            Forgot Password?
+          </Link>
+
+        </div>
 
       </div>
 
     </main>
   );
 }
+
+
 
