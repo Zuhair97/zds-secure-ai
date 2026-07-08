@@ -128,3 +128,73 @@
     @apply font-sans;
   }
 }
+/* ===========================
+   ZDS CYBER BACKGROUND
+=========================== */
+
+@keyframes cyberMove {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 200px 200px;
+  }
+}
+
+@keyframes glowPulse {
+  0%,100%{
+    opacity:.35;
+    transform:scale(1);
+  }
+
+  50%{
+    opacity:.8;
+    transform:scale(1.15);
+  }
+}
+
+.cyber-bg{
+    position:relative;
+    overflow:hidden;
+    background:#050816;
+}
+
+.cyber-bg::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background-image:
+
+    linear-gradient(rgba(0,180,255,.08) 1px, transparent 1px),
+
+    linear-gradient(90deg, rgba(0,180,255,.08) 1px, transparent 1px);
+
+    background-size:60px 60px;
+
+    animation:cyberMove 20s linear infinite;
+
+}
+
+.cyber-bg::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:450px;
+
+    height:450px;
+
+    background:radial-gradient(circle,#00d4ff55 0%,transparent 70%);
+
+    top:-120px;
+
+    right:-100px;
+
+    animation:glowPulse 6s ease infinite;
+
+}

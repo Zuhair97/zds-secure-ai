@@ -60,9 +60,9 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen bg-black flex items-center justify-center px-4">
+    <main className="min-h-screen cyber-bg flex items-center justify-center px-4">
 
-      <div className="w-full max-w-md rounded-3xl bg-zinc-900 shadow-2xl p-8">
+      <div className="relative z-10 w-full max-w-md rounded-3xl bg-zinc-900/90 backdrop-blur-xl shadow-2xl p-8 border border-cyan-500/20">
 
         <div className="flex justify-center mb-6">
           <Image
