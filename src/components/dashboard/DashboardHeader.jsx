@@ -6,18 +6,16 @@ import { Input } from "@/components/ui/input";
 
 export default function DashboardHeader() {
   return (
-    <header className="w-full bg-white border-b border-slate-200 px-8 py-5 flex items-center justify-between">
+    <header className="w-full border-b border-slate-800 bg-slate-950/80 backdrop-blur-xl px-8 py-5 flex items-center justify-between">
 
       <div>
-
-        <h1 className="text-3xl font-bold text-slate-900">
-          Dashboard
+        <h1 className="text-3xl font-bold text-white">
+          Command Center
         </h1>
 
-        <p className="text-slate-500 mt-1">
-          Welcome back to ZDS Secure AI
+        <p className="text-slate-400 mt-1">
+          Monitor your devices in real time.
         </p>
-
       </div>
 
       <div className="flex items-center gap-5">
@@ -26,30 +24,28 @@ export default function DashboardHeader() {
 
           <Search
             size={18}
-            className="absolute left-3 top-3 text-slate-400"
+            className="absolute left-3 top-3 text-slate-500"
           />
 
           <Input
-            placeholder="Search..."
-            className="pl-10 w-72"
+            placeholder="Search devices, alerts..."
+            className="pl-10 w-72 bg-slate-900 border-slate-700 text-white"
           />
 
         </div>
 
-        <button className="relative rounded-xl border border-slate-200 p-3 hover:bg-slate-100 transition">
+        <button className="relative p-3 rounded-xl bg-slate-900 hover:bg-slate-800 transition">
 
-          <Bell size={20} />
+          <Bell size={20} className="text-white" />
 
-          <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-red-500"></span>
+          <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
 
         </button>
 
-        <Avatar className="w-11 h-11">
+        <Avatar className="w-11 h-11 border border-blue-500">
 
-          <AvatarFallback className="bg-blue-600 text-white">
-
+          <AvatarFallback className="bg-blue-600 text-white font-bold">
             SA
-
           </AvatarFallback>
 
         </Avatar>

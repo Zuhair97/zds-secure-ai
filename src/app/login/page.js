@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase-auth";
 import LoadingScreen from "@/components/auth/LoadingScreen";
 
@@ -19,11 +19,10 @@ export default function LoginPage() {
 
     setLoading(true);
 
-    const { error } =
-      await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
 
     if (error) {
       setLoading(false);
@@ -37,13 +36,12 @@ export default function LoginPage() {
   async function handleGoogleLogin() {
     setLoading(true);
 
-    const { error } =
-      await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: `${window.location.origin}/dashboard`,
-        },
-      });
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/dashboard`,
+      },
+    });
 
     if (error) {
       setLoading(false);
@@ -52,118 +50,52 @@ export default function LoginPage() {
   }
 
   if (loading) {
-    return (
-      <LoadingScreen
-        title="ZDS Secure AI"
-        subtitle="Authenticating..."
-      />
-    );
+    return <LoadingScreen />;
   }
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-black">
       {/* Animated Background */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 overflow-hidden">
 
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-blue-950 to-black"></div>
+        <div className="absolute -top-32 -left-32 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-pulse"></div>
 
-        <div className="absolute -top-40 -left-40 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute top-1/3 -right-40 w-[30rem] h-[30rem] bg-blue-700/20 rounded-full blur-3xl animate-pulse"></div>
 
-        <div className="absolute top-1/3 right-0 w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-0 left-1/3 w-[26rem] h-[26rem] bg-indigo-600/20 rounded-full blur-3xl animate-pulse"></div>
 
-        <div className="absolute bottom-0 left-1/3 w-80 h-80 bg-sky-500/20 rounded-full blur-3xl animate-pulse"></div>
-
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.03)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
+        {/* Grid */}
+        <div
+          className="absolute inset-0 opacity-10"
+          style={{
+            backgroundImage:
+              "linear-gradient(#00ffff22 1px, transparent 1px), linear-gradient(90deg,#00ffff22 1px, transparent 1px)",
+            backgroundSize: "40px 40px",
+          }}
+        />
 
       </div>
 
-      {/* Login Card */}
+      {/* Floating Particles */}
+      <div className="absolute inset-0 pointer-events-none">
+
+        {[...Array(30)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute bg-cyan-400 rounded-full animate-pulse"
+            style={{
+              width: `${2 + Math.random() * 5}px`,
+              height: `${2 + Math.random() * 5}px`,
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              opacity: Math.random(),
+            }}
+          />
+        ))}
+
+      </div>
+
+      {/* Main Container */}
       <div className="relative z-10 flex min-h-screen items-center justify-center px-6">
 
-        <div className="w-full max-w-md rounded-3xl border border-cyan-500/20 bg-white/10 backdrop-blur-2xl shadow-2xl p-8">
-
-          <div className="flex justify-center">
-
-            <Image
-              src="/zds.png"
-              alt="ZUHAIR Digital Solutions"
-              width={260}
-              height={80}
-              priority
-              className="object-contain"
-            />
-
-          </div>
-
-          <h1 className="mt-6 text-center text-3xl font-bold text-white">
-            ZDS Secure AI
-          </h1>
-
-          <p className="mt-2 text-center text-cyan-300">
-            Next Generation AI Cybersecurity Platform
-          </p>
-
-          <form
-            onSubmit={handleLogin}
-            className="mt-8 space-y-5"
-          >
-
-            <input
-              type="email"
-              placeholder="Email Address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full rounded-xl border border-cyan-500/20 bg-slate-900/60 p-4 text-white outline-none focus:border-cyan-400"
-            />
-
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full rounded-xl border border-cyan-500/20 bg-slate-900/60 p-4 text-white outline-none focus:border-cyan-400"
-            />
-
-            <button
-              type="submit"
-              className="w-full rounded-xl bg-cyan-500 py-4 font-bold text-black transition hover:bg-cyan-400"
-            >
-              Secure Login
-            </button>
-            <button
-              type="button"
-              onClick={handleGoogleLogin}
-              className="w-full rounded-xl border border-white/20 bg-white py-4 font-bold text-black transition hover:bg-gray-200"
-            >
-              Continue with Google
-            </button>
-
-          </form>
-
-          <div className="mt-8 flex items-center justify-between text-sm">
-
-            <Link
-              href="/signup"
-              className="text-cyan-300 hover:text-cyan-200 hover:underline"
-            >
-              Create Account
-            </Link>
-
-            <Link
-              href="/forgot-password"
-              className="text-cyan-300 hover:text-cyan-200 hover:underline"
-            >
-              Forgot Password?
-            </Link>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </main>
-  );
-}
+        <div className="w-full max-w-lg rounded-3xl border border-cyan-500/30 bg-slate-900/60 backdrop-blur-2xl shadow-[0_0_80px_rgba(0,255,255,.15)] p-10">
