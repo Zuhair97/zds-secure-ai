@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Link from "next/link";
 import { Bell, Search } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
@@ -8,7 +9,25 @@ export default function DashboardHeader() {
   return (
 const [search, setSearch] = useState("");
     <header className="w-full border-b border-slate-800 bg-slate-950/80 backdrop-blur-xl px-8 py-5 flex items-center justify-between">
+const [showNotifications, setShowNotifications] = useState(false);
 
+const notifications = [
+  {
+    id: 1,
+    title: "AI blocked a phishing attack",
+    time: "2 min ago",
+  },
+  {
+    id: 2,
+    title: "Device location updated",
+    time: "10 min ago",
+  },
+  {
+    id: 3,
+    title: "Security scan completed",
+    time: "25 min ago",
+  },
+];
       <div>
         <h1 className="text-3xl font-bold text-white">
           Command Center
@@ -73,14 +92,57 @@ Search Results
 
         </div>
 
-        <button className="relative p-3 rounded-xl bg-slate-900 hover:bg-slate-800 transition">
+        <button
+  onClick={() => setShowNotifications(!showNotifications)}
+  className="relative rounded-xl border p-3 hover:bg-slate-100 transition"
+>
 
           <Bell size={20} className="text-white" />
 
           <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
 
         </button>
+{showNotifications && (
 
+<div className="absolute right-20 top-16 w-80 rounded-2xl border border-cyan-500/30 bg-slate-900 shadow-2xl z-50">
+
+<div className="p-4 border-b border-slate-700">
+
+<h3 className="font-bold text-cyan-400">
+Notifications
+</h3>
+
+</div>
+
+{notifications.map((item) => (
+
+<div
+  key={item.id}
+  className="p-4 border-b border-slate-800 hover:bg-slate-800 cursor-pointer"
+>
+
+<p className="text-white text-sm">
+{item.title}
+</p>
+
+<p className="text-slate-400 text-xs mt-1">
+{item.time}
+</p>
+
+</div>
+
+))}
+
+<Link
+  href="/notifications"
+  className="block text-center text-cyan-400 p-3 hover:bg-slate-800"
+>
+View all notifications
+</Link>
+
+</div>
+
+)}
         <Avatar className="w-11 h-11 border border-blue-500">
 
           <AvatarFallback className="bg-blue-600 text-white font-bold">
