@@ -1,6 +1,6 @@
 
 "use client";
-
+import ThreatFeed from "@/components/dashboard/ThreatFeed";
 import AuthGuard from "@/components/auth/AuthGuard";
 
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
@@ -25,7 +25,7 @@ export default function DashboardPage() {
             <DashboardStats />
 
             <DashboardSecurityHealth />
-
+            <ThreatFeed />
             <DashboardDeviceGrid />
 
           </div>
