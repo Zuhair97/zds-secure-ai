@@ -1,5 +1,6 @@
 
 "use client";
+import LiveCyberMap from "@/components/dashboard/LiveCyberMap";
 import ThreatFeed from "@/components/dashboard/ThreatFeed";
 import AuthGuard from "@/components/auth/AuthGuard";
 
@@ -26,6 +27,7 @@ export default function DashboardPage() {
 
             <DashboardSecurityHealth />
             <ThreatFeed />
+            <LiveCyberMap />
             <DashboardDeviceGrid />
 
           </div>
