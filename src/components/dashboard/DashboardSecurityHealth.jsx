@@ -1,82 +1,100 @@
+
 "use client";
 
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-
-const items = [
-  {
-    title: "AI Protection",
-    status: "Active",
-  },
-  {
-    title: "Device Integrity",
-    status: "Verified",
-  },
-  {
-    title: "Fingerprint",
-    status: "Trusted",
-  },
-  {
-    title: "Anti-Theft",
-    status: "Enabled",
-  },
-  {
-    title: "Recovery",
-    status: "Ready",
-  },
-  {
-    title: "Encryption",
-    status: "Secure",
-  },
-];
+import { useEffect, useState } from "react";
+import { MapPin, Clock } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 
 export default function DashboardSecurityHealth() {
+
+  const [locations, setLocations] = useState([]);
+
+  useEffect(() => {
+    loadLocations();
+  }, []);
+
+  async function loadLocations() {
+
+    const { data } = await supabase
+      .from("device_locations")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(10);
+
+    if (data) {
+      setLocations(data);
+    }
+
+  }
+
   return (
-    <Card className="rounded-2xl p-6 shadow-sm">
 
-      <div className="flex items-center justify-between mb-6">
+    <div className="rounded-2xl bg-slate-900 text-white p-6">
 
-        <h2 className="text-xl font-bold">
+      <h2 className="text-2xl font-bold mb-6">
+        Live Location Timeline
+      </h2>
 
-          Security Health
+      <div className="space-y-5">
 
-        </h2>
+        {locations.length === 0 ? (
 
-        <Badge className="bg-green-600">
+          <p className="text-slate-400">
+            Waiting for live GPS updates...
+          </p>
 
-          Excellent
+        ) : (
 
-        </Badge>
+          locations.map((item) => (
+
+            <div
+              key={item.id}
+              className="flex justify-between border-b border-slate-700 pb-3"
+            >
+
+              <div>
+
+                <div className="flex items-center gap-2">
+
+                  <MapPin
+                    className="text-cyan-400"
+                    size={18}
+                  />
+
+                  <span>
+
+                    {item.latitude},
+                    {item.longitude}
+
+                  </span>
+
+                </div>
+
+              </div>
+
+              <div className="flex items-center gap-2 text-slate-400">
+
+                <Clock size={16} />
+
+                {new Date(item.created_at)
+                  .toLocaleTimeString()}
+
+              </div>
+
+            </div>
+
+          ))
+
+        )}
 
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    </div>
 
-        {items.map((item) => (
-
-          <div
-            key={item.title}
-            className="flex items-center justify-between rounded-xl border p-4"
-          >
-
-            <span className="font-medium">
-
-              {item.title}
-
-            </span>
-
-            <Badge className="bg-green-600">
-
-              {item.status}
-
-            </Badge>
-
-          </div>
-
-        ))}
-
-      </div>
-
-    </Card>
   );
+
 }
+
+
+
+

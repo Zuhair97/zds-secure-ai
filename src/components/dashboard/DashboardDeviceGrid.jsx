@@ -1,33 +1,57 @@
+
 "use client";
 
+import { useEffect, useState } from "react";
 import DashboardDeviceCard from "./DashboardDeviceCard";
+import { supabase } from "@/lib/supabase";
 
 export default function DashboardDeviceGrid() {
+
+  const [devices, setDevices] = useState([]);
+
+  useEffect(() => {
+    loadDevices();
+  }, []);
+
+  async function loadDevices() {
+
+    const { data, error } = await supabase
+      .from("devices")
+      .select("*")
+      .order("last_seen", { ascending: false });
+
+    if (!error) {
+      setDevices(data);
+    }
+
+  }
+
   return (
-    <section className="space-y-6">
 
-      <div className="flex items-center justify-between">
+    <div className="space-y-6">
 
-        <h2 className="text-2xl font-bold">
+      {devices.length === 0 ? (
 
-          Protected Devices
+        <div className="rounded-xl bg-slate-900 text-white p-10 text-center">
+          No registered devices.
+        </div>
 
-        </h2>
+      ) : (
 
-        <span className="text-slate-500">
+        devices.map((device) => (
 
-          1 Device
+          <DashboardDeviceCard
+            key={device.device_id}
+            device={device}
+          />
 
-        </span>
+        ))
 
-      </div>
+      )}
 
-      <div className="grid gap-6">
+    </div>
 
-        <DashboardDeviceCard />
-
-      </div>
-
-    </section>
   );
+
 }
+

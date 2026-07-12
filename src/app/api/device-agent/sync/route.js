@@ -41,7 +41,51 @@ console.log("Lookup error:", checkError);
       operating_system: data.operating_system ?? null,
 
       os_version: data.os_version ?? null,
+manufacturer: data.manufacturer ?? null,
 
+model: data.model ?? null,
+
+device_type: data.device_type ?? null,
+
+platform: data.platform ?? null,
+
+architecture: data.architecture ?? null,
+
+serial_number: data.serial_number ?? null,
+
+imei: data.imei ?? null,
+
+android_id: data.android_id ?? null,
+
+storage_total: data.storage_total ?? null,
+
+storage_free: data.storage_free ?? null,
+
+ram_total: data.ram_total ?? null,
+
+network_type: data.network_type ?? null,
+
+public_ip: data.public_ip ?? null,
+
+local_ip: data.local_ip ?? null,
+
+mac_address: data.mac_address ?? null,
+
+sdk_version: data.sdk_version ?? null,
+
+security_patch: data.security_patch ?? null,
+
+app_version: data.app_version ?? null,
+
+agent_version: data.agent_version ?? null,
+
+timezone: data.timezone ?? null,
+
+language: data.language ?? null,
+
+country: data.country ?? null,
+
+city: data.city ?? null,
       ip_address: data.ip_address ?? null,
 
       cpu_percent: data.cpu_percent ?? null,

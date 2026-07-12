@@ -1,3 +1,4 @@
+
 "use client";
 
 import {
@@ -11,7 +12,16 @@ import {
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
-export default function DashboardDeviceCard() {
+export default function DashboardDeviceCard({ device }) {
+
+  if (!device) {
+    return (
+      <Card className="p-6 rounded-2xl">
+        <p>No device registered yet.</p>
+      </Card>
+    );
+  }
+
   return (
     <Card className="p-6 rounded-2xl shadow-sm">
 
@@ -21,20 +31,19 @@ export default function DashboardDeviceCard() {
 
           <div className="flex items-center gap-3">
 
-            <Smartphone className="text-blue-600" size={30} />
+            <Smartphone
+              className="text-cyan-500"
+              size={30}
+            />
 
             <div>
 
               <h2 className="text-xl font-bold">
-
-                Samsung Galaxy A15
-
+                {device.manufacturer} {device.model}
               </h2>
 
               <p className="text-slate-500">
-
-                Android 15
-
+                {device.platform} • {device.operating_system}
               </p>
 
             </div>
@@ -43,10 +52,14 @@ export default function DashboardDeviceCard() {
 
         </div>
 
-        <Badge className="bg-green-600">
-
-          Online
-
+        <Badge
+          className={
+            device.status === "online"
+              ? "bg-green-600"
+              : "bg-red-600"
+          }
+        >
+          {device.status}
         </Badge>
 
       </div>
@@ -56,21 +69,14 @@ export default function DashboardDeviceCard() {
         <div>
 
           <div className="flex items-center gap-2">
-
             <BatteryFull size={18} />
-
             <span className="text-sm text-slate-500">
-
               Battery
-
             </span>
-
           </div>
 
           <p className="font-bold mt-2">
-
-            92%
-
+            {device.battery_level ?? "--"}%
           </p>
 
         </div>
@@ -78,21 +84,14 @@ export default function DashboardDeviceCard() {
         <div>
 
           <div className="flex items-center gap-2">
-
             <Wifi size={18} />
-
             <span className="text-sm text-slate-500">
-
               Network
-
             </span>
-
           </div>
 
           <p className="font-bold mt-2">
-
-            Connected
-
+            {device.network_type ?? "--"}
           </p>
 
         </div>
@@ -100,21 +99,14 @@ export default function DashboardDeviceCard() {
         <div>
 
           <div className="flex items-center gap-2">
-
             <ShieldCheck size={18} />
-
             <span className="text-sm text-slate-500">
-
               Trust Score
-
             </span>
-
           </div>
 
           <p className="font-bold mt-2 text-green-600">
-
-            100
-
+            {device.trust_score}
           </p>
 
         </div>
@@ -122,21 +114,14 @@ export default function DashboardDeviceCard() {
         <div>
 
           <div className="flex items-center gap-2">
-
             <MapPin size={18} />
-
             <span className="text-sm text-slate-500">
-
-              Last Location
-
+              Location
             </span>
-
           </div>
 
           <p className="font-bold mt-2">
-
-            Kano, Nigeria
-
+            {device.city}, {device.country}
           </p>
 
         </div>
@@ -146,3 +131,6 @@ export default function DashboardDeviceCard() {
     </Card>
   );
 }
+
+
+
