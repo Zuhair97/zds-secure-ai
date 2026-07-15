@@ -3,45 +3,65 @@ import { supabaseAdmin } from "@/lib/supabase-admin";
 
 export async function POST(request) {
   try {
-
     const body = await request.json();
 
     const {
       device_id,
-      command
+      command,
+      payload = {},
+      issued_by = null,
     } = body;
 
     if (!device_id || !command) {
       return NextResponse.json(
         {
           success: false,
-          error: "device_id and command required"
+          message: "device_id and command are required",
         },
-        {
-          status: 400
-        }
+        { status: 400 }
       );
     }
 
-    const { data, error } = await supabaseAdmin
-      .from("device_commands")
-      .insert([
-        {
+    // Store command queue
+    const { data: queuedCommand, error: queueError } =
+      await supabaseAdmin
+        .from("device_commands")
+        .insert({
           device_id,
           command,
-          status: "pending"
-        }
-      ])
-      .select()
-      .single();
+          payload,
+          status: "pending",
+          issued_by,
+          created_at: new Date().toISOString(),
+        })
+        .select()
+        .single();
 
-    if (error) {
-      throw error;
+    if (queueError) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: queueError.message,
+        },
+        { status: 500 }
+      );
     }
+
+    // Audit remote action
+    await supabaseAdmin
+      .from("remote_device_actions")
+      .insert({
+        device_id,
+        action: command,
+        status: "queued",
+        issued_by,
+        created_at: new Date().toISOString(),
+      });
 
     return NextResponse.json({
       success: true,
-      command: data
+      message: "Remote command queued successfully.",
+      command: queuedCommand,
     });
 
   } catch (error) {
@@ -49,10 +69,10 @@ export async function POST(request) {
     return NextResponse.json(
       {
         success: false,
-        error: error.message
+        message: error.message,
       },
       {
-        status: 500
+        status: 500,
       }
     );
 

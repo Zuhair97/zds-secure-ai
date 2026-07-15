@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
@@ -29,11 +30,24 @@ console.log("Lookup error:", checkError);
         }
       );
     }
-
+const identityHash = crypto
+  .createHash("sha256")
+  .update(
+    [
+      data.manufacturer,
+      data.model,
+      data.platform,
+      data.architecture,
+      data.serial_number,
+      data.android_id,
+      data.fingerprint,
+    ].join("|")
+  )
+  .digest("hex");
     const devicePayload = {
-
+      identity_hash: identityHash,
       user_id: data.user_id ?? null,
-
+      clone_detected: cloneDetected,
       device_id: data.device_id,
 
       hostname: data.hostname ?? null,
@@ -122,7 +136,21 @@ city: data.city ?? null,
         .select("*")
         .eq("device_id", data.device_id)
         .maybeSingle();
+// ========= CLONE DETECTION =========
 
+let cloneDetected = false;
+
+if (
+  existingDevice &&
+  existingDevice.identity_hash &&
+  existingDevice.identity_hash !== identityHash
+) {
+  cloneDetected = true;
+
+  trustScore = Math.min(trustScore, 20);
+  riskLevel = "critical";
+  riskReason = "Possible cloned or spoofed device detected";
+}
     if (lookupError) {
 
       return NextResponse.json(
@@ -235,8 +263,72 @@ city: data.city ?? null,
       }
 
     }
+// ========= RECOVERY ENGINE =========
 
-    // ========= DEVICE STATUS =========
+// Root Detection
+if (devicePayload.root_detected === true) {
+
+  trustScore = Math.min(trustScore, 10);
+  riskLevel = "critical";
+  riskReason = "Root access detected";
+
+  devicePayload.recovery_mode = true;
+  devicePayload.recovery_reason = "ROOT_DETECTED";
+}
+
+// SIM Change Detection
+if (
+  existingDevice &&
+  existingDevice.sim_serial &&
+  devicePayload.sim_serial &&
+  existingDevice.sim_serial !== devicePayload.sim_serial
+) {
+
+  trustScore = Math.min(trustScore, 20);
+  riskLevel = "critical";
+  riskReason = "SIM card changed";
+
+  devicePayload.sim_changed = true;
+  devicePayload.recovery_mode = true;
+  devicePayload.recovery_reason = "SIM_CHANGED";
+}
+
+// Boot Hash Verification
+if (
+  existingDevice &&
+  existingDevice.boot_hash &&
+  devicePayload.boot_hash &&
+  existingDevice.boot_hash !== devicePayload.boot_hash
+) {
+
+  trustScore = Math.min(trustScore, 15);
+  riskLevel = "critical";
+  riskReason = "Boot integrity changed";
+
+  devicePayload.recovery_mode = true;
+  devicePayload.recovery_reason = "BOOT_HASH_CHANGED";
+}
+if (devicePayload.recovery_mode) {
+
+  await supabaseAdmin
+    .from("device_events")
+    .insert({
+
+      device_id: devicePayload.device_id,
+
+      event_type: "RECOVERY_MODE",
+
+      event_message: devicePayload.recovery_reason,
+
+      metadata: {
+        trust_score: trustScore,
+        risk_level: riskLevel
+      }
+
+    });
+
+}
+   // ========= DEVICE STATUS =========
 
     await supabaseAdmin
       .from("devices")
