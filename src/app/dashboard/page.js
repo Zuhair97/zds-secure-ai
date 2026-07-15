@@ -1,19 +1,20 @@
-
 "use client";
-import LiveCyberMap from "@/components/dashboard/LiveCyberMap";
-import ThreatFeed from "@/components/dashboard/ThreatFeed";
+
 import AuthGuard from "@/components/auth/AuthGuard";
 
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import DashboardStats from "@/components/dashboard/DashboardStats";
-import DashboardDeviceGrid from "@/components/dashboard/DashboardDeviceGrid";
 import DashboardSecurityHealth from "@/components/dashboard/DashboardSecurityHealth";
+import ThreatFeed from "@/components/dashboard/ThreatFeed";
+import LiveCyberMap from "@/components/dashboard/LiveCyberMap";
+import DashboardDeviceGrid from "@/components/dashboard/DashboardDeviceGrid";
+import RemoteControlPanel from "@/components/dashboard/RemoteControlPanel";
 
 export default function DashboardPage() {
   return (
     <AuthGuard>
-      <div className="flex min-h-screen bg-slate-100">
+      <div className="flex min-h-screen bg-slate-950">
 
         <DashboardSidebar />
 
@@ -26,8 +27,13 @@ export default function DashboardPage() {
             <DashboardStats />
 
             <DashboardSecurityHealth />
+
+            <RemoteControlPanel />
+
             <ThreatFeed />
+
             <LiveCyberMap />
+
             <DashboardDeviceGrid />
 
           </div>
@@ -38,5 +44,6 @@ export default function DashboardPage() {
     </AuthGuard>
   );
 }
+
 
 
