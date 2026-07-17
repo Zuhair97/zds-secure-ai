@@ -1,6 +1,6 @@
 
 "use client";
-
+import CurrentDeviceProvider from "@/contexts/CurrentDeviceProvider";
 import { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase-auth";
 
@@ -43,14 +43,16 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider
-      value={{
-        user,
-        session,
-        loading,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
+  value={{
+    user,
+    session,
+    loading,
+  }}
+>
+  <CurrentDeviceProvider>
+    {children}
+  </CurrentDeviceProvider>
+</AuthContext.Provider>
   );
 }
 

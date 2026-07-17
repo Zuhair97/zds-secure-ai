@@ -2,6 +2,8 @@
 
 import AuthGuard from "@/components/auth/AuthGuard";
 
+import CurrentDeviceProvider from "@/contexts/CurrentDeviceProvider";
+
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import DashboardStats from "@/components/dashboard/DashboardStats";
@@ -10,40 +12,46 @@ import ThreatFeed from "@/components/dashboard/ThreatFeed";
 import LiveCyberMap from "@/components/dashboard/LiveCyberMap";
 import DashboardDeviceGrid from "@/components/dashboard/DashboardDeviceGrid";
 import RemoteControlPanel from "@/components/dashboard/RemoteControlPanel";
+import DeviceSelector from "@/components/dashboard/DeviceSelector";
 
 export default function DashboardPage() {
   return (
     <AuthGuard>
-      <div className="flex min-h-screen bg-slate-950">
 
-        <DashboardSidebar />
+      <CurrentDeviceProvider>
 
-        <main className="flex-1 flex flex-col">
+        <div className="flex min-h-screen bg-slate-950">
 
-          <DashboardHeader />
+          <DashboardSidebar />
 
-          <div className="p-8 space-y-8">
+          <main className="flex-1 flex flex-col">
 
-            <DashboardStats />
+            <DashboardHeader />
 
-            <DashboardSecurityHealth />
+            <div className="p-8 space-y-8">
 
-            <RemoteControlPanel />
+              <DashboardStats />
 
-            <ThreatFeed />
+              <DeviceSelector />
 
-            <LiveCyberMap />
+              <DashboardSecurityHealth />
 
-            <DashboardDeviceGrid />
+              <RemoteControlPanel />
 
-          </div>
+              <ThreatFeed />
 
-        </main>
+              <LiveCyberMap />
 
-      </div>
+              <DashboardDeviceGrid />
+
+            </div>
+
+          </main>
+
+        </div>
+
+      </CurrentDeviceProvider>
+
     </AuthGuard>
   );
 }
-
-
-

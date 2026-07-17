@@ -1,57 +1,55 @@
-
 "use client";
 
-import { useEffect, useState } from "react";
 import DashboardDeviceCard from "./DashboardDeviceCard";
-import { supabase } from "@/lib/supabase";
+import useDevices from "@/hooks/useDevices";
+import { useCurrentDevice } from "@/hooks/useCurrentDevice";
 
 export default function DashboardDeviceGrid() {
 
-  const [devices, setDevices] = useState([]);
+  const { devices, loading } = useDevices();
 
-  useEffect(() => {
-    loadDevices();
-  }, []);
+  const {
+    currentDevice,
+    setCurrentDevice,
+  } = useCurrentDevice();
 
-  async function loadDevices() {
 
-    const { data, error } = await supabase
-      .from("devices")
-      .select("*")
-      .order("last_seen", { ascending: false });
-
-    if (!error) {
-      setDevices(data);
-    }
-
+  if (loading) {
+    return (
+      <div className="text-slate-400">
+        Loading devices...
+      </div>
+    );
   }
 
+
+  if (!devices.length) {
+    return (
+      <div className="rounded-2xl border border-slate-800 p-8 text-center text-slate-400">
+        No registered devices found.
+      </div>
+    );
+  }
+
+
+  const device =
+    currentDevice || devices[0];
+
+
+  if (!currentDevice && device) {
+    setCurrentDevice(device);
+  }
+
+
   return (
+    <div className="grid gap-6">
 
-    <div className="space-y-6">
 
-      {devices.length === 0 ? (
+      <DashboardDeviceCard
+        device={device}
+      />
 
-        <div className="rounded-xl bg-slate-900 text-white p-10 text-center">
-          No registered devices.
-        </div>
-
-      ) : (
-
-        devices.map((device) => (
-
-          <DashboardDeviceCard
-            key={device.device_id}
-            device={device}
-          />
-
-        ))
-
-      )}
 
     </div>
-
   );
-
 }
-

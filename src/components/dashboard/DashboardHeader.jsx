@@ -1,5 +1,5 @@
 "use client";
-
+import DeviceSelector from "./DeviceSelector";
 import { useState } from "react";
 import Link from "next/link";
 import { Bell, Search } from "lucide-react";
@@ -42,7 +42,7 @@ export default function DashboardHeader() {
       </div>
 
       <div className="flex items-center gap-5">
-
+        <DeviceSelector />
         {/* SEARCH */}
 
         <div className="relative">
