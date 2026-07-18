@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import {
   ShieldCheck,
   Smartphone,
@@ -7,93 +8,132 @@ import {
   MapPinned,
 } from "lucide-react";
 
-const stats = [
-  {
-    title: "Trust Score",
-    value: "100",
-    subtitle: "Excellent",
-    color: "text-green-600",
-    icon: ShieldCheck,
-  },
-  {
-    title: "Protected Devices",
-    value: "1",
-    subtitle: "Online",
-    color: "text-blue-600",
-    icon: Smartphone,
-  },
-  {
-    title: "Threat Alerts",
-    value: "0",
-    subtitle: "Safe",
-    color: "text-red-600",
-    icon: AlertTriangle,
-  },
-  {
-    title: "Recovery Status",
-    value: "Ready",
-    subtitle: "GPS Active",
-    color: "text-purple-600",
-    icon: MapPinned,
-  },
-];
+import { supabase } from "@/lib/supabase-auth";
 
 export default function DashboardStats() {
+  const [stats, setStats] = useState({
+    trustScore: "--",
+    protectedDevices: 0,
+    threatAlerts: 0,
+    recoveryStatus: "Unknown",
+  });
+
+  useEffect(() => {
+    async function loadStats() {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) return;
+
+      // Trust Score
+      const { data: trust } = await supabase
+        .from("device_trust")
+        .select("trust_score")
+        .eq("user_id", user.id)
+        .order("updated_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      // Devices
+      const { data: devices } = await supabase
+        .from("device_registry")
+        .select("id,recovery_mode")
+        .eq("user_id", user.id);
+
+      // Alerts
+      const { count: alertsCount } = await supabase
+        .from("alerts")
+        .select("*", { count: "exact", head: true })
+        .eq("user_id", user.id)
+        .eq("resolved", false);
+
+      const recoveryReady =
+        devices?.some((d) => d.recovery_mode === true) ?? false;
+
+      setStats({
+        trustScore: trust?.trust_score ?? "--",
+        protectedDevices: devices?.length ?? 0,
+        threatAlerts: alertsCount ?? 0,
+        recoveryStatus: recoveryReady ? "Ready" : "Disabled",
+      });
+    }
+
+    loadStats();
+  }, []);
+
+  const cards = [
+    {
+      title: "Trust Score",
+      value: stats.trustScore,
+      subtitle: "Device Trust Engine",
+      color: "text-green-500",
+      icon: ShieldCheck,
+    },
+    {
+      title: "Protected Devices",
+      value: stats.protectedDevices,
+      subtitle: "Registered",
+      color: "text-cyan-400",
+      icon: Smartphone,
+    },
+    {
+      title: "Threat Alerts",
+      value: stats.threatAlerts,
+      subtitle: "Unresolved",
+      color: "text-red-500",
+      icon: AlertTriangle,
+    },
+    {
+      title: "Recovery Status",
+      value: stats.recoveryStatus,
+      subtitle: "Recovery Engine",
+      color: "text-purple-400",
+      icon: MapPinned,
+    },
+  ];
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-
-      {stats.map((item) => {
-
-        const Icon = item.icon;
+    <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+      {cards.map((card) => {
+        const Icon = card.icon;
 
         return (
-
           <div
-            key={item.title}
-            className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition"
+            key={card.title}
+            className="rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-lg"
           >
-
             <div className="flex items-center justify-between">
-
               <div>
-
-                <p className="text-slate-500 text-sm">
-
-                  {item.title}
-
+                <p className="text-slate-400 text-sm">
+                  {card.title}
                 </p>
 
-                <h2 className={`text-3xl font-bold mt-2 ${item.color}`}>
-
-                  {item.value}
-
+                <h2 className={`mt-3 text-3xl font-bold ${card.color}`}>
+                  {card.value}
                 </h2>
 
-                <p className="text-slate-400 mt-2 text-sm">
-
-                  {item.subtitle}
-
+                <p className="mt-2 text-xs text-slate-500">
+                  {card.subtitle}
                 </p>
-
               </div>
 
-              <div className="rounded-xl bg-slate-100 p-4">
-
+              <div className="rounded-xl bg-slate-800 p-4">
                 <Icon
+                  className={card.color}
                   size={28}
-                  className={item.color}
                 />
-
               </div>
-
             </div>
-
           </div>
-
         );
-
       })}
-
     </div>
   );
 }
+
+
+
+
+
+
